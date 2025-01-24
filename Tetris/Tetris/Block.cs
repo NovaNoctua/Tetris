@@ -8,7 +8,32 @@ namespace Tetris
 {
     public abstract class Block
     {
-        protected abstract Position[][] Tiles { get; }
-        protected abstract Position StartOffset { get; }
+        protected List<Square> squares;
+
+        public abstract void Rotate();
+
+        public void Display()
+        {
+            foreach (var square in squares)
+            {
+                square.Display();
+            }
+        }
+
+        public void Erase()
+        {
+            foreach (var square in squares)
+            {
+                square.Erase();
+            }
+        }
+
+        public void Move(int deltaX, int deltaY)
+        {
+            foreach (var square in squares)
+            {
+                square.Move(deltaX, deltaY);
+            }
+        }
     }
 }

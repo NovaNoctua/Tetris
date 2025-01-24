@@ -7,7 +7,7 @@ namespace Tetris
         /// <summary>
         /// Attributs of square
         /// </summary>
-        private Position position;
+        public Position position;
         private readonly int _color;          //color of the square
 
         public ConsoleColor Color
@@ -69,6 +69,18 @@ namespace Tetris
                 Console.SetCursorPosition(position.Row, position.Column + i);
                 Console.WriteLine("   ");
             }
+        }
+
+        public void Move(int deltaX, int deltaY)
+        {
+            position.Row += deltaX; 
+            position.Column += deltaY;
+        }
+
+        public void SetPosition(int newRow, int newColumn)
+        {
+            position.Row = newRow;
+            position.Column = newColumn;
         }
     }
 }
