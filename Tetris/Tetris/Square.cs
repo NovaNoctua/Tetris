@@ -7,24 +7,8 @@ namespace Tetris
         /// <summary>
         /// Attributs of square
         /// </summary>
-        private int _xPosition;      //X Position of square
-        private int _yPosition;     //Y Position of square
+        private Position position;
         private readonly int _color;          //color of the square
-
-        /// <summary>
-        /// setter and getter of the attributs
-        /// </summary>
-        public int YPosition
-        {
-            get { return  _yPosition; }
-            set {  _yPosition = value; }
-        }
-
-        public int XPosition
-        {
-            get { return _xPosition; }
-            set { _xPosition = value; }
-        }
 
         public ConsoleColor Color
         {
@@ -55,9 +39,8 @@ namespace Tetris
 
         public Square(int xPosition, int yPosition, int color)
         {
-            this._xPosition = xPosition;
-            this._yPosition = yPosition;
-            this._color = color;
+            position = new Position(xPosition, yPosition);
+            Color = colors[color];
         }
 
         /// <summary>
@@ -70,7 +53,7 @@ namespace Tetris
 
             for(int i = 0; i < models.Length; i++)
             {
-                Console.SetCursorPosition(_xPosition, _yPosition + i);
+                Console.SetCursorPosition(position.Row, position.Column + i);
                 Console.WriteLine(models[i]);
             }          
         }
@@ -83,7 +66,7 @@ namespace Tetris
         {
             for(int i = 0; i < models.Length; i++)
             {
-                Console.SetCursorPosition(_xPosition, _yPosition + i);
+                Console.SetCursorPosition(position.Row, position.Column + i);
                 Console.WriteLine("   ");
             }
         }
