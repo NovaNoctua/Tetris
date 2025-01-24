@@ -13,7 +13,11 @@ namespace Tetris
     {
         static void Main(string[] args)
         {
-            Console.SetWindowSize(Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
+            Console.CursorVisible = false;
+            Start.Introduction();
+            Config.GameSize();
+
+          
             Grid grid = new Grid(55, 45);
 
 
@@ -27,11 +31,13 @@ namespace Tetris
 
             while (true)
             {
-                Console.Clear();
                 Console.ForegroundColor = ConsoleColor.White;
                 grid.Display();
                 square.Display(2);
                 square2.Display(3);
+                Thread.Sleep(100);
+                square.Erase();
+                square2.Erase();
                 square2.YPosition++;
                 square.YPosition++;
 

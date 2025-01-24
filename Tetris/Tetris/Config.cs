@@ -17,5 +17,11 @@ namespace Tetris
     {
         public const int SCREEN_HEIGHT = 55;
         public const int SCREEN_WIDTH = 150;
+
+        public static void GameSize()
+        {
+            Console.SetWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+            Console.SetBufferSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+        }
     }
 }
