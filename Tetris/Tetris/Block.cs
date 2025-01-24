@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Tetris
 {
-    internal abstract class Block
+    public abstract class Block
     {
+        protected abstract Position[][] Tiles { get; }
+        protected abstract Position StartOffset { get; }
     }
 }

@@ -18,11 +18,11 @@ namespace Tetris
             Config.GameSize();
 
           
-            Grid grid = new Grid(55, 45);
+            GameGrid grid = new GameGrid(55, 45);
 
 
-            Square square = new Square();
-            Square square2 = new Square();
+            Square square = new Square(5, 5, 2);
+            Square square2 = new Square(5, 5, 3);
             square.XPosition = 6; 
             square.YPosition = 6;
             square2.XPosition = 9;
@@ -33,8 +33,8 @@ namespace Tetris
             {
                 Console.ForegroundColor = ConsoleColor.White;
                 grid.Display();
-                square.Display(2);
-                square2.Display(3);
+                square.Display();
+                square2.Display();
                 Thread.Sleep(100);
                 square.Erase();
                 square2.Erase();
