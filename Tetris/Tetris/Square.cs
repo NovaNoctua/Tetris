@@ -60,7 +60,7 @@ namespace Tetris
         public void SetPosition(int newRow, int newColumn)
         {
             position.Row = newRow;
-            position.Column = newColumn;
+            position.Column = newColumn;    
         }
     }
 }

@@ -17,25 +17,16 @@ namespace Tetris
             Console.CursorVisible = false;
             Start.Introduction();
             Config.GameSize();
-            
 
-          
-            GameGrid grid = new GameGrid(55, 45);
+            Game game = new Game();
 
+            game.Initialize();
 
-            Block carre = new BlockL(6, 6);
-
-
-
-            while (true)
+            while(true)
             {
-                Console.ForegroundColor = ConsoleColor.White;
-                grid.Display();
-                carre.Display();               
-                Thread.Sleep(1000);
-                carre.Erase();
-                carre.Rotate();
+                game.GameLoop();
             }
+             
         }
     }
 }

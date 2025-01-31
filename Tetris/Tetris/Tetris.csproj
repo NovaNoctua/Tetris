@@ -48,6 +48,7 @@
     <Compile Include="BlockT.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Custom.cs" />
+    <Compile Include="Game.cs" />
     <Compile Include="GameGrid.cs" />
     <Compile Include="Block.cs" />
     <Compile Include="BlockI.cs" />

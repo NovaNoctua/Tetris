@@ -41,6 +41,10 @@ namespace Tetris
             {
                 return _grid;
             }
+            set
+            {
+                _grid = value;
+            }
         }
 
 
