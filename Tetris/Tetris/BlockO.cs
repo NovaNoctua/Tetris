@@ -8,14 +8,14 @@ namespace Tetris
 {
     internal class BlockO : Block
     {
-        public BlockO(int startX, int startY, int color) 
+        public BlockO(int startX, int startY) 
         {
             squares = new List<Square>
             {
-                new Square(startX, startY, color),
-                new Square(startX + 3, startY, color),
-                new Square(startX, startY + 2, color),
-                new Square(startX + 3, startY + 2, color)
+                new Square(startX, startY, _color),
+                new Square(startX + 3, startY, _color),
+                new Square(startX, startY + 2, _color),
+                new Square(startX + 3, startY + 2, _color)
             };
         }
 

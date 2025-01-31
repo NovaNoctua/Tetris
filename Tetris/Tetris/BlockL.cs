@@ -8,15 +8,14 @@ namespace Tetris
 {
     internal class BlockL : Block
     {
-        private byte _rotationState;
-        public BlockL(int startX, int startY, int color)
+        public BlockL(int startX, int startY)
         {
             squares = new List<Square>
             {
-                new Square(startX, startY + 2, color),
-                new Square(startX + 3, startY + 2, color),
-                new Square(startX + 6, startY + 2, color),
-                new Square(startX + 6, startY, color)
+                new Square(startX, startY + 2, _color),
+                new Square(startX + 3, startY + 2, _color),
+                new Square(startX + 6, startY + 2, _color),
+                new Square(startX + 6, startY, _color)
             };
 
             _rotationState = 0;

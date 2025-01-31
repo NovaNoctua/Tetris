@@ -8,27 +8,7 @@ namespace Tetris
         /// Attributs of square
         /// </summary>
         public Position position;
-        private readonly int _color;          //color of the square
-
-        public ConsoleColor Color
-        {
-            get { return colors[_color]; }
-            private set { colors[_color] = value; }
-        }
-
-        //list of possible colors
-        private ConsoleColor[] colors = {
-            ConsoleColor.Black,
-            ConsoleColor.DarkBlue,
-            ConsoleColor.DarkGreen,
-            ConsoleColor.DarkCyan,
-            ConsoleColor.DarkRed,
-            ConsoleColor.DarkMagenta,
-            ConsoleColor.DarkYellow,
-            ConsoleColor.Gray,
-            ConsoleColor.DarkGray,
-            ConsoleColor.Blue
-        };
+        private readonly ConsoleColor _color;          //color of the square
 
         //model of the square
         private string[] models = 
@@ -37,10 +17,10 @@ namespace Tetris
             "╚═╝" 
         };
 
-        public Square(int xPosition, int yPosition, int color)
+        public Square(int xPosition, int yPosition, int colorIndex)
         {
             position = new Position(xPosition, yPosition);
-            Color = colors[color];
+            _color = Custom.Colors[colorIndex];
         }
 
         /// <summary>
@@ -49,7 +29,7 @@ namespace Tetris
         public void Display()
         {
             //changes color
-            Console.ForegroundColor = Color;
+            Console.ForegroundColor = _color;
 
             for(int i = 0; i < models.Length; i++)
             {

@@ -9,6 +9,8 @@ namespace Tetris
     internal abstract class Block 
     {
         protected List<Square> squares;
+        protected byte _rotationState;
+        protected int _color = new Random().Next(Custom.Colors.Count());
 
         public abstract void Rotate();
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 
 ///ETML
@@ -16,12 +17,13 @@ namespace Tetris
             Console.CursorVisible = false;
             Start.Introduction();
             Config.GameSize();
+            
 
           
             GameGrid grid = new GameGrid(55, 45);
 
 
-            Block carre = new BlockL(6, 6, 2);
+            Block carre = new BlockL(6, 6);
 
 
 

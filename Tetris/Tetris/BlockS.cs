@@ -10,14 +10,14 @@ namespace Tetris
     {
         private bool _isHorizontal;
 
-        public BlockS(int startX, int startY, int color)
+        public BlockS(int startX, int startY)
         {
             squares = new List<Square>
             {
-                new Square(startX, startY + 2, color),
-                new Square(startX + 3, startY + 2, color),
-                new Square(startX + 3, startY, color),
-                new Square(startX + 6, startY, color)
+                new Square(startX, startY + 2, _color),
+                new Square(startX + 3, startY + 2, _color),
+                new Square(startX + 3, startY, _color),
+                new Square(startX + 6, startY, _color)
             };
             _isHorizontal = true;
         }
