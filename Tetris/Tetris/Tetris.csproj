@@ -43,15 +43,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BlockL.cs" />
+    <Compile Include="BlockS.cs" />
+    <Compile Include="BlockT.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="GameGrid.cs" />
     <Compile Include="Block.cs" />
-    <Compile Include="IBlock.cs" />
+    <Compile Include="BlockI.cs" />
+    <Compile Include="BlockJ.cs" />
+    <Compile Include="BlockO.cs" />
     <Compile Include="Position.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Square.cs" />
     <Compile Include="Start.cs" />
+    <Compile Include="BlockZ.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Tetris
 {
-    public abstract class Block
+    internal abstract class Block 
     {
         protected List<Square> squares;
 

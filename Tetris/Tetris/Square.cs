@@ -2,7 +2,7 @@
 
 namespace Tetris
 {
-    public class Square
+    internal class Square
     {
         /// <summary>
         /// Attributs of square

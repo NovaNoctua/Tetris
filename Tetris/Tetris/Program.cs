@@ -21,7 +21,7 @@ namespace Tetris
             GameGrid grid = new GameGrid(55, 45);
 
 
-            Block carre = new IBlock(6, 6, 2);
+            Block carre = new BlockL(6, 6, 2);
 
 
 
@@ -30,7 +30,7 @@ namespace Tetris
                 Console.ForegroundColor = ConsoleColor.White;
                 grid.Display();
                 carre.Display();               
-                Thread.Sleep(200);
+                Thread.Sleep(1000);
                 carre.Erase();
                 carre.Rotate();
             }

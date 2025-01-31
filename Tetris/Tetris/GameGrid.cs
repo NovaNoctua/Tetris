@@ -9,7 +9,7 @@ namespace Tetris
     /// <summary>
     /// Game's grid where the pieces will evolve in
     /// </summary>
-    public class GameGrid
+    internal class GameGrid
     {
 
         //properties
