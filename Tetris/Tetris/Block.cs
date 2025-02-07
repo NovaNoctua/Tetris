@@ -8,15 +8,31 @@ namespace Tetris
 {
     internal abstract class Block 
     {
-        protected List<Square> squares;
+        protected List<Square> _squares;
         protected byte _rotationState;
-        protected int _color = new Random().Next(Custom.Colors.Count());
+        protected int _color = Custom.GetRandomColorIndex();
+        protected int _id;
+        protected Position _position;
+        public Position Position
+        {
+            get
+            {
+                return _position;
+            }
+        }
+        public List<Square> Squares
+        {
+            get
+            {
+                return _squares;
+            }
+        }
 
         public abstract void Rotate();
 
         public void Display()
         {
-            foreach (var square in squares)
+            foreach (var square in Squares)
             {
                 square.Display();
             }
@@ -24,7 +40,7 @@ namespace Tetris
 
         public void Erase()
         {
-            foreach (var square in squares)
+            foreach (var square in Squares)
             {
                 square.Erase();
             }
@@ -32,7 +48,7 @@ namespace Tetris
 
         public void Move(int deltaX, int deltaY)
         {
-            foreach (var square in squares)
+            foreach (var square in Squares)
             {
                 square.Move(deltaX, deltaY);
             }

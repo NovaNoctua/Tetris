@@ -12,33 +12,34 @@ namespace Tetris
 
         public BlockS(int startX, int startY)
         {
-            squares = new List<Square>
+            _squares = new List<Square>
             {
-                new Square(startX, startY + 2, _color),
-                new Square(startX + 3, startY + 2, _color),
-                new Square(startX + 3, startY, _color),
-                new Square(startX + 6, startY, _color)
+                new Square(6 + 3 * (startX), 6 + 2 * (startY) + 2, _color),
+                new Square(6 + 3 * (startX) + 3, 6 + 2 * (startY) + 2, _color),
+                new Square(6 + 3 * (startX) + 3, 6 + 2 * (startY), _color),
+                new Square(6 + 3 * (startX) + 6, 6 + 2 * (startY), _color)
             };
+            _position = new Position(startX, startY);
             _isHorizontal = true;
         }
 
         public override void Rotate()
         {
-            Square pivot = squares[1];
+            Square pivot = _squares[1];
 
             if(_isHorizontal)
             {
-                squares[0].SetPosition(pivot.position.Row, pivot.position.Column - 2);
-                squares[2].SetPosition(pivot.position.Row + 3, pivot.position.Column);
-                squares[3].SetPosition(pivot.position.Row + 3, pivot.position.Column + 2);
+                _squares[0].SetPosition(pivot.position.Row, pivot.position.Column - 2);
+                _squares[2].SetPosition(pivot.position.Row + 3, pivot.position.Column);
+                _squares[3].SetPosition(pivot.position.Row + 3, pivot.position.Column + 2);
 
                 _isHorizontal = false;
             }
             else
             {
-                squares[0].SetPosition(pivot.position.Row - 3, pivot.position.Column);
-                squares[2].SetPosition(pivot.position.Row, pivot.position.Column - 2);
-                squares[3].SetPosition(pivot.position.Row + 3, pivot.position.Column - 2);
+                _squares[0].SetPosition(pivot.position.Row - 3, pivot.position.Column);
+                _squares[2].SetPosition(pivot.position.Row, pivot.position.Column - 2);
+                _squares[3].SetPosition(pivot.position.Row + 3, pivot.position.Column - 2);
 
                 _isHorizontal = true;
             }

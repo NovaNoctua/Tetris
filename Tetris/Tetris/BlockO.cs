@@ -10,13 +10,14 @@ namespace Tetris
     {
         public BlockO(int startX, int startY) 
         {
-            squares = new List<Square>
+            _squares = new List<Square>
             {
-                new Square(startX, startY, _color),
-                new Square(startX + 3, startY, _color),
-                new Square(startX, startY + 2, _color),
-                new Square(startX + 3, startY + 2, _color)
+                new Square(6 + 3 * (startX), 6 + 2 * (startY), _color),
+                new Square(6 + 3 * (startX) + 3, 6 + 2 * (startY), _color),
+                new Square(6 + 3 * (startX), 6 + 2 * (startY) + 2, _color),
+                new Square(6 + 3 * (startX) + 3, 6 + 2 * (startY) + 2, _color)
             };
+            _position = new Position(startX, startY);
         }
 
         public override void Rotate()
