@@ -1,0 +1,49 @@
+Autre manière de déplacer les blocs : 
+if (Console.KeyAvailable)
+{
+    ConsoleKeyInfo keyInputUser = Console.ReadKey(true);
+    lastInputTime = DateTime.Now;
+
+    switch (keyInputUser.Key)
+    {
+        case ConsoleKey.RightArrow:
+            if (grid.CanBlockFit(blockFalling, 1, 0))
+            {
+                grid.MoveBlock(blockFalling, 1, 0);
+                blockFalling.Erase();
+                blockFalling.Move(3, 0);
+                blockFalling.Display();
+            }
+            break;
+
+        case ConsoleKey.LeftArrow:
+            if (grid.CanBlockFit(blockFalling, -1, 0))
+            {
+                grid.MoveBlock(blockFalling, -1, 0);
+                blockFalling.Erase();
+                blockFalling.Move(-3, 0);
+                blockFalling.Display();
+            }
+            break;
+
+        case ConsoleKey.UpArrow:
+            blockFalling.Erase();
+            blockFalling.Rotate();
+            blockFalling.Display();
+            break;
+
+        case ConsoleKey.DownArrow:
+            if (grid.CanBlockFit(blockFalling, 0, 1))
+            {
+                grid.MoveBlock(blockFalling, 0, 1);
+                blockFalling.Erase();
+                blockFalling.Move(0, 2);
+                blockFalling.Display();
+
+            }
+            break;
+
+        default:
+            break;
+    }
+}

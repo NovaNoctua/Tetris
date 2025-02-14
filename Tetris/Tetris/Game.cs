@@ -1,13 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;
+using System.IO;
 
 namespace Tetris
 {
     internal class Game
     {
+        [DllImport("user32.dll")]
+        private static extern short GetAsyncKeyState(int vKey);
+        private const int VK_SPACE = 0x20;
+        private const int VK_LEFT = 0x25;
+        private const int VK_RIGHT = 0x27;       
+        private const int VK_DOWN = 0x28;
         private GameGrid grid;
-        private List<Block> allBlocks = new List<Block>();
+        private int blockFallsAfter = 500;
+        private int coolDownMovement = 100;
+        private DateTime startCoolDown;
+        private DateTime endCoolDown;
+        private DateTime startOfTurn;
+        private DateTime endOfTurn;
+        private readonly List<Block> allBlocks = new List<Block>();
         private bool endGame;
 
         private const byte STARTING_Y_POSITION = 0;
@@ -23,73 +38,72 @@ namespace Tetris
 
         public void GameLoop()
         {
-            Block blockFalling = GetRandomBlock();
+            Block blockFalling = Block.GetRandomBlock(STARTING_X_POSITION, STARTING_Y_POSITION);
             allBlocks.Add(blockFalling);
             grid.CreateBlockInGrid(blockFalling);
             if (!grid.CanBlockFit(blockFalling, 0, 1))
             {
                 endGame = true;
             }
-
-            while(grid.CanBlockFit(blockFalling, 0, 1))
+            startOfTurn = DateTime.Now;
+            startCoolDown = DateTime.Now;
+            while (grid.CanBlockFit(blockFalling, 0, 1))
             {
+                endOfTurn = DateTime.Now;
+                endCoolDown = DateTime.Now;
                 grid.DisplayGridInt();
                 blockFalling.Display();
 
-
-                if (Console.KeyAvailable)
+                if((GetAsyncKeyState(VK_RIGHT) & 0x8000) != 0 && (endCoolDown - startCoolDown).TotalMilliseconds > coolDownMovement)
                 {
-                    ConsoleKeyInfo keyInputUser = Console.ReadKey(true);
-                    switch (keyInputUser.Key)
+                    if (grid.CanBlockFit(blockFalling, 1, 0))
                     {
-                        case ConsoleKey.RightArrow:
-                            if (grid.CanBlockFit(blockFalling, 1, 0))
-                            {
-                                grid.MoveBlock(blockFalling, 1, 0);
-                                blockFalling.Erase();
-                                blockFalling.Move(3, 0);
-                                blockFalling.Display();
-                            }
-                            break;
-
-                        case ConsoleKey.LeftArrow:
-                            if (grid.CanBlockFit(blockFalling, -1, 0))
-                            {
-                                grid.MoveBlock(blockFalling, -1, 0);
-                                blockFalling.Erase();
-                                blockFalling.Move(-3, 0);
-                                blockFalling.Display();
-                            }
-                            break;
-
-                        case ConsoleKey.UpArrow:
-                            blockFalling.Erase();
-                            blockFalling.Rotate();
-                            blockFalling.Display();
-                            break;
-
-                        case ConsoleKey.DownArrow:
-                            if (grid.CanBlockFit(blockFalling, 0, 1))
-                            {
-                                grid.MoveBlock(blockFalling, 0, 1);
-                                blockFalling.Erase();
-                                blockFalling.Move(0, 2);
-                                blockFalling.Display();
-
-                            }
-                            break;
-
-                        default:
-                            break;
+                        grid.MoveBlock(blockFalling, 1, 0);
+                        blockFalling.Erase();
+                        blockFalling.Move(3, 0);
+                        blockFalling.Display();
+                        startCoolDown = DateTime.Now;
                     }
                 }
-                Thread.Sleep(500);
-                if (grid.CanBlockFit(blockFalling, 0, 1))
+                else if((GetAsyncKeyState(VK_LEFT) & 0x8000) != 0 && (endCoolDown - startCoolDown).TotalMilliseconds > coolDownMovement)
+                {
+                    if (grid.CanBlockFit(blockFalling, -1, 0))
+                    {
+                        grid.MoveBlock(blockFalling, -1, 0);
+                        blockFalling.Erase();
+                        blockFalling.Move(-3, 0);
+                        blockFalling.Display();
+                        startCoolDown = DateTime.Now;
+                    }
+                }
+                else if((GetAsyncKeyState(VK_DOWN) & 0x8000) != 0 && (endCoolDown - startCoolDown).TotalMilliseconds > coolDownMovement)
+                {
+                    if (grid.CanBlockFit(blockFalling, 0, 1))
+                    {
+                        grid.MoveBlock(blockFalling, 0, 1);
+                        blockFalling.Erase();
+                        blockFalling.Move(0, 2);
+                        blockFalling.Display();
+                        startCoolDown = DateTime.Now;
+                    }
+                }
+                else if((GetAsyncKeyState(VK_SPACE) & 0x8000) != 0 && (endCoolDown - startCoolDown).TotalMilliseconds > coolDownMovement)
+                {
+                    if (grid.CanBlockRotate(blockFalling))
+                    {
+                        grid.RotateBlock(blockFalling);
+                        startCoolDown = DateTime.Now;
+                    }
+                }
+                
+                
+                if (grid.CanBlockFit(blockFalling, 0, 1) && (endOfTurn - startOfTurn).Milliseconds > blockFallsAfter)
                 {
                     grid.MoveBlock(blockFalling, 0, 1);
                     blockFalling.Erase();
                     blockFalling.Move(0, 2);
                     blockFalling.Display();
+                    startOfTurn = DateTime.Now;
                 }
             }
 
@@ -98,23 +112,6 @@ namespace Tetris
                 Console.Clear();
                 Console.WriteLine("FINITO");
             }
-        }
-
-        private Block GetRandomBlock()
-        {
-            Random random = new Random();
-            int index = random.Next(0, 7);  // Il y a 7 types de blocs
-            switch (index)
-            {
-                case 0: return new BlockI(STARTING_X_POSITION, STARTING_Y_POSITION);
-                case 1: return new BlockJ(STARTING_X_POSITION, STARTING_Y_POSITION);
-                case 2: return new BlockL(STARTING_X_POSITION, STARTING_Y_POSITION);
-                case 3: return new BlockO(STARTING_X_POSITION, STARTING_Y_POSITION);
-                case 4: return new BlockS(STARTING_X_POSITION, STARTING_Y_POSITION);
-                case 5: return new BlockT(STARTING_X_POSITION, STARTING_Y_POSITION);
-                case 6: return new BlockZ(STARTING_X_POSITION, STARTING_Y_POSITION);
-                default: throw new Exception("Unexpected block type");
-            }
-        }
+        }        
     }
 }

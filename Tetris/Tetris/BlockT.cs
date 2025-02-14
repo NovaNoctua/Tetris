@@ -58,5 +58,39 @@ namespace Tetris
                 _rotationState = 0;
             }
         }
+
+        public override List<(int row, int col)> GetRotatedPositions()
+        {
+            Square pivot = _squares[2];
+            List<(int row, int col)> rotatedPositions = new List<(int row, int col)>();
+
+            if (_rotationState == 0)
+            {
+                rotatedPositions.Add((pivot.position.Row + 3, pivot.position.Column));  // Position de _squares[0]
+                rotatedPositions.Add((pivot.position.Row, pivot.position.Column - 2));  // Position de _squares[1]
+                rotatedPositions.Add((pivot.position.Row, pivot.position.Column + 2));  // Position de _squares[3]
+            }
+            else if (_rotationState == 1)
+            {
+                rotatedPositions.Add((pivot.position.Row, pivot.position.Column + 2));  // Position de _squares[0]
+                rotatedPositions.Add((pivot.position.Row - 3, pivot.position.Column));  // Position de _squares[1]
+                rotatedPositions.Add((pivot.position.Row + 3, pivot.position.Column));  // Position de _squares[3]
+            }
+            else if (_rotationState == 2)
+            {
+                rotatedPositions.Add((pivot.position.Row, pivot.position.Column + 2));  // Position de _squares[0]
+                rotatedPositions.Add((pivot.position.Row - 3, pivot.position.Column));  // Position de _squares[1]
+                rotatedPositions.Add((pivot.position.Row, pivot.position.Column - 2));  // Position de _squares[3]
+            }
+            else if (_rotationState == 3)
+            {
+                rotatedPositions.Add((pivot.position.Row - 3, pivot.position.Column));  // Position de _squares[0]
+                rotatedPositions.Add((pivot.position.Row, pivot.position.Column - 2));  // Position de _squares[1]
+                rotatedPositions.Add((pivot.position.Row + 3, pivot.position.Column));  // Position de _squares[3]
+            }
+
+            return rotatedPositions;
+        }
+
     }
 }

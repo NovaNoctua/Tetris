@@ -273,5 +273,35 @@ namespace Tetris
                 }
             }
         }
+
+        public bool CanBlockRotate(Block block)
+        {
+            // On récupère les nouvelles positions après rotation
+            List<(int row, int col)> rotatedPositions = block.GetRotatedPositions();
+
+            // On vérifie si toutes les nouvelles positions sont valides
+            foreach (var (newRow, newCol) in rotatedPositions)
+            {
+                // Si une position est en dehors de la grille ou occupée par un autre bloc, on ne peut pas faire la rotation
+                if (!IsInside((newRow / 3) - 6 , (newCol / 2) - 6) || Grid[(newRow / 3) - 6, (newCol / 2) - 6] == true)
+                {
+                    return false;
+                }
+            }
+
+            // Si toutes les positions sont valides, la rotation est possible
+            return true;
+        }
+
+        public void RotateBlock(Block block)
+        {
+            DestroyBlockInGrid(block);
+            block.Erase();
+            block.Rotate();
+            CreateBlockInGrid(block);
+            block.Display();
+        }
+
+
     }
 }

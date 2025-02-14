@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Tetris
 {
@@ -57,6 +53,41 @@ namespace Tetris
 
                 _rotationState = 0;
             }
+        }
+
+        public override List<(int row, int col)> GetRotatedPositions()
+        {
+            // On commence par récupérer la position du pivot
+            Square pivot = _squares[2];
+            List<(int row, int col)> rotatedPositions = new List<(int row, int col)>();
+
+            // On applique la logique de rotation selon l'état de rotation actuel
+            if (_rotationState == 0)
+            {
+                rotatedPositions.Add((pivot.position.Row + 3, pivot.position.Column - 2));
+                rotatedPositions.Add((pivot.position.Row, pivot.position.Column - 2));
+                rotatedPositions.Add((pivot.position.Row, pivot.position.Column + 2));
+            }
+            else if (_rotationState == 1)
+            {
+                rotatedPositions.Add((pivot.position.Row + 3, pivot.position.Column + 2));
+                rotatedPositions.Add((pivot.position.Row + 3, pivot.position.Column));
+                rotatedPositions.Add((pivot.position.Row - 3, pivot.position.Column));
+            }
+            else if (_rotationState == 2)
+            {
+                rotatedPositions.Add((pivot.position.Row - 3, pivot.position.Column + 2));
+                rotatedPositions.Add((pivot.position.Row, pivot.position.Column + 2));
+                rotatedPositions.Add((pivot.position.Row, pivot.position.Column - 2));
+            }
+            else if (_rotationState == 3)
+            {
+                rotatedPositions.Add((pivot.position.Row - 3, pivot.position.Column - 2));
+                rotatedPositions.Add((pivot.position.Row - 3, pivot.position.Column));
+                rotatedPositions.Add((pivot.position.Row + 3, pivot.position.Column));
+            }
+
+            return rotatedPositions;
         }
     }
 }

@@ -44,5 +44,27 @@ namespace Tetris
                 _isHorizontal = true;
             }
         }
+
+        public override List<(int row, int col)> GetRotatedPositions()
+        {
+            Square pivot = _squares[2];
+            List<(int row, int col)> rotatedPositions = new List<(int row, int col)>();
+
+            if (_isHorizontal)
+            {
+                rotatedPositions.Add((pivot.position.Row + 3, pivot.position.Column - 2));  // Position de _squares[0]
+                rotatedPositions.Add((pivot.position.Row + 3, pivot.position.Column));      // Position de _squares[1]
+                rotatedPositions.Add((pivot.position.Row, pivot.position.Column + 2));      // Position de _squares[3]
+            }
+            else
+            {
+                rotatedPositions.Add((pivot.position.Row - 3, pivot.position.Column - 2));  // Position de _squares[0]
+                rotatedPositions.Add((pivot.position.Row, pivot.position.Column - 2));      // Position de _squares[1]
+                rotatedPositions.Add((pivot.position.Row + 3, pivot.position.Column));      // Position de _squares[3]
+            }
+
+            return rotatedPositions;
+        }
+
     }
 }

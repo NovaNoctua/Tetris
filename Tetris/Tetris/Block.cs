@@ -53,5 +53,24 @@ namespace Tetris
                 square.Move(deltaX, deltaY);
             }
         }
+
+        static public Block GetRandomBlock(int xPosition, int yPosition)
+        {
+            Random random = new Random();
+            int index = random.Next(0, 7);  // Il y a 7 types de blocs
+            switch (index)
+            {
+                case 0: return new BlockI(xPosition, yPosition);
+                case 1: return new BlockJ(xPosition, yPosition);
+                case 2: return new BlockL(xPosition, yPosition);
+                case 3: return new BlockO(xPosition, yPosition);
+                case 4: return new BlockS(xPosition, yPosition);
+                case 5: return new BlockT(xPosition, yPosition);
+                case 6: return new BlockZ(xPosition, yPosition);
+                default: throw new Exception("Unexpected block type");
+            }
+        }
+
+        public abstract List<(int row, int col)> GetRotatedPositions();
     }
 }

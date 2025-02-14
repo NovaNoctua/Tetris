@@ -24,5 +24,20 @@ namespace Tetris
         {
            
         }
+
+        public override List<(int row, int col)> GetRotatedPositions()
+        {
+            // Le bloc O n'a pas de changement de forme, donc ses positions restent identiques à chaque rotation
+            List<(int row, int col)> rotatedPositions = new List<(int row, int col)>();
+
+            foreach (var square in _squares)
+            {
+                rotatedPositions.Add((square.position.Row, square.position.Column));  // Ajoute simplement les positions actuelles
+            }
+
+            return rotatedPositions;
+        }
+
+
     }
 }
