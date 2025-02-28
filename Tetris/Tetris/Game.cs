@@ -24,20 +24,22 @@ namespace Tetris
         private DateTime endOfTurn;
         private readonly List<Block> allBlocks = new List<Block>();
         private bool endGame;
+        private int _linesDestroyed;
 
         private const byte STARTING_Y_POSITION = 0;
         private const byte STARTING_X_POSITION = 7;
 
-
+        public int LinesDestroyed { get; set; }
         public void Initialize()
         {
-            grid = new GameGrid(20, 20);
+            grid = new GameGrid(10, 20);
             grid.Display();
             endGame = false;
         }
 
         public void GameLoop()
         {
+            grid.DisplayGridInt();
             Block blockFalling = Block.GetRandomBlock(STARTING_X_POSITION, STARTING_Y_POSITION);
             allBlocks.Add(blockFalling);
             grid.CreateBlockInGrid(blockFalling);
@@ -49,9 +51,9 @@ namespace Tetris
             startCoolDown = DateTime.Now;
             while (grid.CanBlockFit(blockFalling, 0, 1))
             {
-                endOfTurn = DateTime.Now;
-                endCoolDown = DateTime.Now;
                 grid.DisplayGridInt();
+                endOfTurn = DateTime.Now;
+                endCoolDown = DateTime.Now;               
                 blockFalling.Display();
 
                 if((GetAsyncKeyState(VK_RIGHT) & 0x8000) != 0 && (endCoolDown - startCoolDown).TotalMilliseconds > coolDownMovement)
@@ -105,13 +107,36 @@ namespace Tetris
                     blockFalling.Display();
                     startOfTurn = DateTime.Now;
                 }
+
+                LinesDestroyed += grid.ClearFullRow();               
             }
+
+            
+
 
             if (endGame)
             {
                 Console.Clear();
                 Console.WriteLine("FINITO");
             }
-        }        
+        }
+        
+        private void DisplayAllBlocks()
+        {
+            foreach (Block block in allBlocks)
+            {
+                foreach (Square square in block.Squares)
+                {
+                    square.Erase();
+                }
+            }
+            foreach (Block block in allBlocks)
+            {
+                foreach (Square square in block.Squares)
+                {
+                    square.Display();
+                }
+            }
+        }
     }
 }

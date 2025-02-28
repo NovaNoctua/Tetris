@@ -38,6 +38,19 @@ namespace Tetris
             return rotatedPositions;
         }
 
+        public override Block Clone()
+        {
+            // Créer une nouvelle instance avec la position actuelle
+            BlockO clone = new BlockO(_position.Row, _position.Column);
+
+            // Copier l'état de rotation
+            clone._rotationState = this._rotationState;
+
+            // Copier la liste des carrés avec la bonne couleur
+            clone._squares = this._squares.Select(s => new Square(s.position.Row, s.position.Column, Custom.Colors.ToList().IndexOf(s.Color))).ToList();
+
+            return clone;
+        }
 
     }
 }

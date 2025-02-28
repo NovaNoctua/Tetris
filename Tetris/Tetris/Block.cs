@@ -29,6 +29,7 @@ namespace Tetris
         }
 
         public abstract void Rotate();
+        public abstract Block Clone();
 
         public void Display()
         {

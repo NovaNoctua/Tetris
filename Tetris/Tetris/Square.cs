@@ -10,6 +10,8 @@ namespace Tetris
         public Position position;
         private readonly ConsoleColor _color;          //color of the square
 
+        public ConsoleColor Color => _color;
+
         //model of the square
         private string[] models = 
         { 

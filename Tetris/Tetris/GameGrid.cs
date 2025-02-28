@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 ///ETML
 ///Auteur : Maël Naudet
@@ -84,9 +85,9 @@ namespace Tetris
         /// <returns></returns>
         public bool isRowFull(int r)
         {
-            for (int i = 0; i < Column; i++)
+            for (int i = 0; i < Row; i++)
             {
-                if (!Grid[r, i])
+                if (!Grid[i, r])
                 {
                     return false;
                 }
@@ -117,9 +118,9 @@ namespace Tetris
         /// <param name="r">numéro de la ligne</param>
         private void ClearRow(int r)
         {
-            for (int i = 0; i < Column; i++)
+            for (int i = 0; i < Row; i++)
             {
-                Grid[r, i] = false;
+                Grid[i, r] = false;
             }
         }
 
@@ -127,13 +128,13 @@ namespace Tetris
         /// Déplace une ligne vers le bas
         /// </summary>
         /// <param name="r">numéro de la ligne</param>
-        /// <param name="numRow">nombre de lignes à descendre</param>
+        /// <param name="numRow">numéro de lignes à descendre</param>
         private void MoveRowDown(int r, int numRow)
         {
-            for (int i = 0; i < Column; i++)
+            for (int i = 0; i < Row; i++)
             {
-                Grid[r + numRow, i] = Grid[r, i];
-                Grid[r, i] = false;
+                Grid[i, r + numRow] = Grid[i, r];
+                Grid[i, r] = false;
             }
         }
 
@@ -144,7 +145,7 @@ namespace Tetris
         public int ClearFullRow()
         {
             int cleared = 0;
-            for (int i = Row - 1; i >= 0; i--)
+            for (int i = Column - 1; i >= 0; i--)
             {
                 if (isRowFull(i))
                 {
@@ -157,6 +158,11 @@ namespace Tetris
                 }
             }
             return cleared;
+        }
+
+        public void FullBlockDisplay()
+        {
+
         }
 
         /// <summary>
@@ -220,37 +226,84 @@ namespace Tetris
 
         public bool CanBlockFit(Block block, int deltaX, int deltaY)
         {
+            //// Sauvegarde l'état du bloc original dans la grille (avant de tester).
+            //this.DestroyBlockInGrid(block);
+
+            //// Crée un clone pour tester la nouvelle position sans affecter l'original.
+            //Block clone = block.Clone();
+            //clone.Move(deltaX, deltaY); // Déplace le clone
+
+            //// Vérifie chaque carré du clone dans la nouvelle position
+            //foreach (Square square in clone.Squares)
+            //{
+            //    try
+            //    {
+            //        // Calcul de la nouvelle position du carré dans la grille
+            //        int newRow = (square.position.Row - 6) / 3;
+            //        int newCol = (square.position.Column - 6) / 2;
+
+            //        // Si la position est déjà occupée ou hors de la grille, retourne false
+            //        if (Grid[newRow, newCol])
+            //        {
+            //            this.CreateBlockInGrid(block); // Réinsère le bloc original dans la grille
+            //            return false;
+            //        }
+            //    }
+            //    catch (System.IndexOutOfRangeException)
+            //    {
+            //        this.CreateBlockInGrid(block); // Réinsère le bloc original dans la grille
+            //        return false; // Hors de la grille
+            //    }
+            //}
+
+            //// Si tout est ok, réinsère le bloc d'origine dans la grille
+            //this.CreateBlockInGrid(block);
+            //return true;
+
+
             // Récupère les positions actuelles (indices de grille) occupées par le block
             var currentPositions = new HashSet<(int row, int col)>();
             foreach (Square square in block.Squares)
             {
-                int curRow = (square.position.Row - 6) / 3;
-                int curCol = (square.position.Column - 6) / 2;
+                // Convertit la position du carré en indices de grille
+                int curRow = (square.position.Row - 6) / 3;  // Calcul pour obtenir la ligne dans la grille
+                int curCol = (square.position.Column - 6) / 2;  // Calcul pour obtenir la colonne dans la grille
+
+                // Ajoute la position actuelle à l'ensemble des positions du bloc
                 currentPositions.Add((curRow, curCol));
             }
 
-            // Pour chaque carré, on calcule la nouvelle position dans la grille
+            // Pour chaque carré, on calcule la nouvelle position dans la grille après déplacement (et rotation, si nécessaire)
             foreach (Square square in block.Squares)
             {
-                int newRow = (square.position.Row - 6) / 3 + deltaX;
-                int newCol = (square.position.Column - 6) / 2 + deltaY;
+                // Calcul de la nouvelle position dans la grille en tenant compte du déplacement
+                int newRow = (square.position.Row - 6) / 3 + deltaX;  // Applique le décalage deltaX à la ligne
+                int newCol = (square.position.Column - 6) / 2 + deltaY;  // Applique le décalage deltaY à la colonne
+
+                if (newRow < 0 || newRow >= Grid.GetLength(0) || newCol < 0 || newCol >= Grid.GetLength(1))
+                {
+                    return false; // Si l'indice est en dehors des limites, retourner false immédiatement
+                }
+
                 try
                 {
-                    // Si la nouvelle cellule n'est pas déjà occupée par l'un des carrés du block 
-                    // (qui va être "libérée" lors du déplacement) et qu'elle est occupée dans la grille,
-                    // alors le block ne peut pas y aller.
+                    // Si la nouvelle position n'est pas déjà occupée par un carré du même bloc
+                    // et qu'elle est occupée dans la grille par un autre bloc, on ne peut pas y déplacer le bloc
                     if (!currentPositions.Contains((newRow, newCol)) && Grid[newRow, newCol])
                     {
-                        return false;
+                        return false;  // Retourne false si la position est déjà occupée
                     }
                 }
                 catch (System.IndexOutOfRangeException)
                 {
-                    // Si la nouvelle position est en dehors de la grille, le block ne peut pas s'y placer.
-                    return false;
+                    // Si la nouvelle position dépasse les limites de la grille, on ne peut pas y déplacer le bloc
+                    return false;  // Retourne false si la position est hors de la grille
                 }
             }
+
+            // Si toutes les vérifications passent (aucune collision et aucune sortie de la grille), on peut déplacer le bloc
             return true;
+
         }
 
         public void MoveBlock(Block block, int deltaX, int deltaY)
@@ -276,21 +329,30 @@ namespace Tetris
 
         public bool CanBlockRotate(Block block)
         {
-            // On récupère les nouvelles positions après rotation
-            List<(int row, int col)> rotatedPositions = block.GetRotatedPositions();
+            Block clone = block.Clone();
 
-            // On vérifie si toutes les nouvelles positions sont valides
-            foreach (var (newRow, newCol) in rotatedPositions)
+            clone.Rotate();
+
+            if (CanBlockFit(clone, 0, 0))
             {
-                // Si une position est en dehors de la grille ou occupée par un autre bloc, on ne peut pas faire la rotation
-                if (!IsInside((newRow / 3) - 6 , (newCol / 2) - 6) || Grid[(newRow / 3) - 6, (newCol / 2) - 6] == true)
-                {
-                    return false;
-                }
+                return true;
             }
+            return false;
+            //// On récupère les nouvelles positions après rotation
+            //List<(int row, int col)> rotatedPositions = block.GetRotatedPositions();
 
-            // Si toutes les positions sont valides, la rotation est possible
-            return true;
+            //// On vérifie si toutes les nouvelles positions sont valides
+            //foreach (var (newRow, newCol) in rotatedPositions)
+            //{
+            //    // Si une position est en dehors de la grille ou occupée par un autre bloc, on ne peut pas faire la rotation
+            //    if (!IsInside((newRow / 3) - 6, (newCol / 2) - 6) || Grid[(newRow / 3) - 6, (newCol / 2) - 6] == true)
+            //    {
+            //        return false;
+            //    }
+            //}
+
+            //// Si toutes les positions sont valides, la rotation est possible
+            //return true;
         }
 
         public void RotateBlock(Block block)
