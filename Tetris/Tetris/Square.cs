@@ -9,8 +9,9 @@ namespace Tetris
         /// </summary>
         public Position position;
         private readonly ConsoleColor _color;          //color of the square
-
+        private readonly int _colorIndex;
         public ConsoleColor Color => _color;
+        public int ColorIndex => _colorIndex;
 
         //model of the square
         private string[] models = 
@@ -22,6 +23,7 @@ namespace Tetris
         public Square(int xPosition, int yPosition, int colorIndex)
         {
             position = new Position(xPosition, yPosition);
+            _colorIndex = colorIndex;
             _color = Custom.Colors[colorIndex];
         }
 

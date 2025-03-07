@@ -22,11 +22,11 @@ namespace Tetris
 
             game.Initialize();
 
-            while(true)
+            while(!game.endGame)
             {
                 game.GameLoop();
             }
-             
+            game.EndScreen();
         }
     }
 }

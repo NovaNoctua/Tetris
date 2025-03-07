@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.IO;
+using System.Data.Common;
 
 namespace Tetris
 {
@@ -23,23 +24,35 @@ namespace Tetris
         private DateTime startOfTurn;
         private DateTime endOfTurn;
         private readonly List<Block> allBlocks = new List<Block>();
-        private bool endGame;
+        public bool endGame;
         private int _linesDestroyed;
+        private int score;
+
 
         private const byte STARTING_Y_POSITION = 0;
         private const byte STARTING_X_POSITION = 7;
 
-        public int LinesDestroyed { get; set; }
+        public int LinesDestroyed 
+        {
+            get
+            {
+                return _linesDestroyed;
+            }
+            set
+            {
+                _linesDestroyed = value;
+            }
+        }
         public void Initialize()
         {
-            grid = new GameGrid(10, 20);
+            grid = new GameGrid(20, 20);
             grid.Display();
             endGame = false;
         }
 
         public void GameLoop()
         {
-            grid.DisplayGridInt();
+            //grid.DisplayGridInt();
             Block blockFalling = Block.GetRandomBlock(STARTING_X_POSITION, STARTING_Y_POSITION);
             allBlocks.Add(blockFalling);
             grid.CreateBlockInGrid(blockFalling);
@@ -51,12 +64,13 @@ namespace Tetris
             startCoolDown = DateTime.Now;
             while (grid.CanBlockFit(blockFalling, 0, 1))
             {
-                grid.DisplayGridInt();
+                //grid.DisplayGridSquare();
+                //grid.DisplayGridInt();
                 endOfTurn = DateTime.Now;
-                endCoolDown = DateTime.Now;               
+                endCoolDown = DateTime.Now;
                 blockFalling.Display();
 
-                if((GetAsyncKeyState(VK_RIGHT) & 0x8000) != 0 && (endCoolDown - startCoolDown).TotalMilliseconds > coolDownMovement)
+                if ((GetAsyncKeyState(VK_RIGHT) & 0x8000) != 0 && (endCoolDown - startCoolDown).TotalMilliseconds > coolDownMovement)
                 {
                     if (grid.CanBlockFit(blockFalling, 1, 0))
                     {
@@ -67,7 +81,7 @@ namespace Tetris
                         startCoolDown = DateTime.Now;
                     }
                 }
-                else if((GetAsyncKeyState(VK_LEFT) & 0x8000) != 0 && (endCoolDown - startCoolDown).TotalMilliseconds > coolDownMovement)
+                else if ((GetAsyncKeyState(VK_LEFT) & 0x8000) != 0 && (endCoolDown - startCoolDown).TotalMilliseconds > coolDownMovement)
                 {
                     if (grid.CanBlockFit(blockFalling, -1, 0))
                     {
@@ -78,7 +92,7 @@ namespace Tetris
                         startCoolDown = DateTime.Now;
                     }
                 }
-                else if((GetAsyncKeyState(VK_DOWN) & 0x8000) != 0 && (endCoolDown - startCoolDown).TotalMilliseconds > coolDownMovement)
+                else if ((GetAsyncKeyState(VK_DOWN) & 0x8000) != 0 && (endCoolDown - startCoolDown).TotalMilliseconds > coolDownMovement)
                 {
                     if (grid.CanBlockFit(blockFalling, 0, 1))
                     {
@@ -89,7 +103,7 @@ namespace Tetris
                         startCoolDown = DateTime.Now;
                     }
                 }
-                else if((GetAsyncKeyState(VK_SPACE) & 0x8000) != 0 && (endCoolDown - startCoolDown).TotalMilliseconds > coolDownMovement)
+                else if ((GetAsyncKeyState(VK_SPACE) & 0x8000) != 0 && (endCoolDown - startCoolDown).TotalMilliseconds > coolDownMovement)
                 {
                     if (grid.CanBlockRotate(blockFalling))
                     {
@@ -97,8 +111,8 @@ namespace Tetris
                         startCoolDown = DateTime.Now;
                     }
                 }
-                
-                
+
+
                 if (grid.CanBlockFit(blockFalling, 0, 1) && (endOfTurn - startOfTurn).Milliseconds > blockFallsAfter)
                 {
                     grid.MoveBlock(blockFalling, 0, 1);
@@ -108,35 +122,66 @@ namespace Tetris
                     startOfTurn = DateTime.Now;
                 }
 
-                LinesDestroyed += grid.ClearFullRow();               
+                
             }
+            LinesDestroyed += grid.ClearFullRow();
 
-            
-
-
-            if (endGame)
+            if (LinesDestroyed > 0)
             {
-                Console.Clear();
-                Console.WriteLine("FINITO");
+                DisplayAllBlocks();
+                LinesDestroyed = 0;
+                score += 5;
             }
         }
-        
+        public void EndScreen()
+        {
+        }
         private void DisplayAllBlocks()
         {
-            foreach (Block block in allBlocks)
+            // Clear the entire grid area first
+            ClearConsoleGrid();
+            UpdateSquarePosition();
+
+            // Re-draw based on the SquareGrid
+            for (int i = 0; i < grid.Row; i++)
             {
-                foreach (Square square in block.Squares)
+                for (int j = 0; j < grid.Column; j++)
                 {
-                    square.Erase();
-                }
-            }
-            foreach (Block block in allBlocks)
-            {
-                foreach (Square square in block.Squares)
-                {
-                    square.Display();
+                    Square square = grid.SquareGrid[i, j];
+                    if (square != null)
+                    {
+                        square.Display();
+                    }
                 }
             }
         }
+
+
+        private void ClearConsoleGrid()
+        {
+            for (int i = 0; i < grid.Column * 2; i++)
+            {
+                for (int j = 0; j < grid.Row * 3; j++)
+                {
+                    Console.SetCursorPosition(6 + j, 6 + i); // Adjusting to grid position
+                    Console.Write(" "); // Clear with spaces
+                }
+            }
+        }
+
+        private void UpdateSquarePosition()
+        {
+            for (int i = 0; i < grid.Row; i++)
+            {
+                for (int j = 0; j < grid.Column; j++)
+                {
+                    if (grid.SquareGrid[i, j] != null)
+                    {
+                        grid.SquareGrid[i, j].position = new Position(6 + 3 * i, 6 + 2 * j);
+                    }                   
+                }
+            }
+        }
+
     }
 }
