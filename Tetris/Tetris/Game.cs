@@ -1,13 +1,19 @@
-﻿using System;
+﻿/// *******************************************************************************************
+/// ETML
+/// Author : Maël Naudet
+/// Date : 07.02.2025
+/// *******************************************************************************************
+
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
-using System.IO;
-using System.Data.Common;
+
 
 namespace Tetris
 {
+    /// <summary>
+    /// Main logic for the game
+    /// </summary>
     internal class Game
     {
         [DllImport("user32.dll")]

@@ -1,11 +1,18 @@
-﻿using System;
+﻿/// *******************************************************************************************
+/// ETML
+/// Author : Maël Naudet
+/// Date : 24.01.2025
+/// *******************************************************************************************
+
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Tetris
 {
+    /// <summary>
+    /// Block en forme de I
+    /// </summary>
     internal class BlockI : Block
     {
         private bool _isHorizontal;

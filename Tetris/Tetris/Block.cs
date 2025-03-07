@@ -1,8 +1,17 @@
-﻿using System;
+﻿/// *******************************************************************************************
+/// ETML
+/// Author : Maël Naudet
+/// Date : 24.01.2025
+/// *******************************************************************************************
+
+using System;
 using System.Collections.Generic;
 
 namespace Tetris
 {
+    /// <summary>
+    /// Classe abstraite qui permet de créer tous les blocs
+    /// </summary>
     internal abstract class Block 
     {
         protected List<Square> _squares;

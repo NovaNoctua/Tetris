@@ -1,11 +1,18 @@
-﻿using System;
+﻿/// *******************************************************************************************
+/// ETML
+/// Author : Maël Naudet
+/// Date : 31.01.2025
+/// *******************************************************************************************
+
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Tetris
 {
+    /// <summary>
+    /// Block en forme de O
+    /// </summary>
     internal class BlockO : Block
     {
         public BlockO(int startX, int startY) 

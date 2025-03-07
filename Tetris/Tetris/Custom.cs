@@ -1,7 +1,16 @@
-﻿using System;
+﻿/// *******************************************************************************************
+/// ETML
+/// Author : Maël Naudet
+/// Date : 31.01.2025
+/// *******************************************************************************************
+
+using System;
 
 namespace Tetris
 {
+    /// <summary>
+    /// Customs the color of the blocks
+    /// </summary>
     internal static class Custom
     {
         private static Random random = new Random();

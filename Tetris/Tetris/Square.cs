@@ -1,7 +1,16 @@
-﻿using System;
+﻿/// *******************************************************************************************
+/// ETML
+/// Author : Maël Naudet
+/// Date : 17.01.2025
+/// *******************************************************************************************
+
+using System;
 
 namespace Tetris
 {
+    /// <summary>
+    /// Square that compose a block
+    /// </summary>
     internal class Square
     {
         /// <summary>

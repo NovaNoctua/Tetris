@@ -1,11 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿/// *******************************************************************************************
+/// ETML
+/// Author : Maël Naudet
+/// Date : 17.01.2025
+/// *******************************************************************************************
+
+using System;
 
 namespace Tetris
 {
+    /// <summary>
+    /// Starting Screen
+    /// </summary>
     internal static class Start
     {
         public static void Introduction()

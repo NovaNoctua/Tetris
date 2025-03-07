@@ -1,15 +1,25 @@
-﻿using System;
+﻿/// *******************************************************************************************
+/// ETML
+/// Author : Maël Naudet
+/// Date : 31.01.2025
+/// *******************************************************************************************
+
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Tetris
 {
+    /// <summary>
+    /// Block en forme de L
+    /// </summary>
     internal class BlockL : Block
-    {
-        
-
+    {        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="startX"></param>
+        /// <param name="startY"></param>
         public BlockL(int startX, int startY)
         {
             _squares = new List<Square>
