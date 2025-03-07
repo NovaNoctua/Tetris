@@ -27,6 +27,7 @@ namespace Tetris
         public bool endGame;
         private int _linesDestroyed;
         private int score;
+        private Block _nextBlock;
 
 
         private const byte STARTING_Y_POSITION = 0;
@@ -48,12 +49,14 @@ namespace Tetris
             grid = new GameGrid(20, 20);
             grid.Display();
             endGame = false;
+            ShowScore();
+            _nextBlock = Block.GetRandomBlock(STARTING_X_POSITION, STARTING_Y_POSITION);
         }
 
         public void GameLoop()
         {
-            //grid.DisplayGridInt();
-            Block blockFalling = Block.GetRandomBlock(STARTING_X_POSITION, STARTING_Y_POSITION);
+            Block blockFalling = _nextBlock;
+            _nextBlock = Block.GetRandomBlock(STARTING_X_POSITION, STARTING_Y_POSITION);
             allBlocks.Add(blockFalling);
             grid.CreateBlockInGrid(blockFalling);
             if (!grid.CanBlockFit(blockFalling, 0, 1))
@@ -64,8 +67,6 @@ namespace Tetris
             startCoolDown = DateTime.Now;
             while (grid.CanBlockFit(blockFalling, 0, 1))
             {
-                //grid.DisplayGridSquare();
-                //grid.DisplayGridInt();
                 endOfTurn = DateTime.Now;
                 endCoolDown = DateTime.Now;
                 blockFalling.Display();
@@ -129,12 +130,22 @@ namespace Tetris
             if (LinesDestroyed > 0)
             {
                 DisplayAllBlocks();
-                LinesDestroyed = 0;
-                score += 5;
+                score += LinesDestroyed * 500;
+                LinesDestroyed = 0;             
+                ShowScore();
             }
         }
         public void EndScreen()
         {
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.SetCursorPosition(10 + grid.Row * 3, 5);
+            Console.Write("Dommage, vous avez perdu, la prochaine pièce n'a pas pu être placée");
+            Console.SetCursorPosition(10 + grid.Row * 3, 6);
+            Console.Write($"Vous avez fait un score de {score}.");
+            Console.SetCursorPosition(10 + grid.Row * 3, 6);
+            Console.Write($"Nombre de lignes détruite(s) : {score / 500}");
+
+            Console.ReadLine();
         }
         private void DisplayAllBlocks()
         {
@@ -183,5 +194,17 @@ namespace Tetris
             }
         }
 
+        private void ShowScore()
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+            DestroyScore();
+            Console.SetCursorPosition(grid.Row * 3 - 3, 3);
+            Console.Write($"Score : {score}");
+        }
+        private void DestroyScore()
+        {
+            Console.SetCursorPosition(grid.Row * 3 - 3, 3);
+            Console.Write("        ");
+        }
     }
 }

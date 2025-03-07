@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-
-///ETML
-///Author : Maël Naudet
-///Date : 17.01.2025
-///Description : Tetris game in console mode
-///*******************************************************************************************
+﻿/// *******************************************************************************************
+/// ETML
+/// Author : Maël Naudet
+/// Date : 17.01.2025
+/// Description : Tetris game in console mode
+/// *******************************************************************************************
+/// 
+using System;
 
 namespace Tetris
 {
