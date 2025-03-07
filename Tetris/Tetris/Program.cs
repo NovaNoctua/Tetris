@@ -4,7 +4,7 @@
 /// Date : 17.01.2025
 /// Description : Tetris game in console mode
 /// *******************************************************************************************
-/// 
+ 
 using System;
 
 namespace Tetris

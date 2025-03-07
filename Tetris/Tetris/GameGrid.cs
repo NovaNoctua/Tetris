@@ -1,9 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/// *******************************************************************************************
+/// ETML
+/// Author : Maël Naudet
+/// Date : 17.01.2025
+/// *******************************************************************************************
 
-///ETML
-///Auteur : Maël Naudet
-///Date : 17.01.2025
+using System;
+using System.Collections.Generic;
 
 namespace Tetris
 {

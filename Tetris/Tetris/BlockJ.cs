@@ -1,8 +1,17 @@
-﻿using System.Collections.Generic;
+﻿/// *******************************************************************************************
+/// ETML
+/// Author : Maël Naudet
+/// Date : 31.01.2025
+/// *******************************************************************************************
+
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Tetris
 {
+    /// <summary>
+    /// Block en forme de J
+    /// </summary>
     internal class BlockJ : Block
     {
         public BlockJ(int startX, int startY)
