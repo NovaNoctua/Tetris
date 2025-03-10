@@ -14,11 +14,19 @@ namespace Tetris
     /// </summary>
     internal abstract class Block 
     {
-        protected List<Square> _squares;
-        protected byte _rotationState;
-        protected int _color = Custom.GetRandomColorIndex();
-        protected int _id;
-        protected Position _position;
+        // Déclaration et des attributs *******************************************************
+        protected List<Square> _squares;                                    // liste de squares qui composent le bloc
+        protected byte _rotationState;                                      // état de rotation
+        protected int _color = Custom.GetRandomColorIndex();                // Couleur aléatoire attribuée au bloc
+        //protected int _id;                                                // id du bloc
+        protected Position _position;                                       // Position du bloc
+        
+
+        // Déclaration des propriétés *********************************************************
+
+        /// <summary>
+        /// Retourne la position du bloc
+        /// </summary>
         public Position Position
         {
             get
@@ -26,6 +34,10 @@ namespace Tetris
                 return _position;
             }
         }
+
+        /// <summary>
+        /// Retourne la liste de squares qui composent le bloc
+        /// </summary>
         public List<Square> Squares
         {
             get
@@ -34,9 +46,22 @@ namespace Tetris
             }
         }
 
+        // Déclaration et (potentielle) implémentation des méthodes ***************************
+
+        /// <summary>
+        /// Méthode permettant de faire une rotation au bloc
+        /// </summary>
         public abstract void Rotate();
+
+        /// <summary>
+        /// Clone une bloc
+        /// </summary>
+        /// <returns>le clone du bloc</returns>
         public abstract Block Clone();
 
+        /// <summary>
+        /// Affiche simplement tous les squares du bloc
+        /// </summary>
         public void Display()
         {
             foreach (var square in Squares)
@@ -45,6 +70,9 @@ namespace Tetris
             }
         }
 
+        /// <summary>
+        /// Efface tous les squares du bloc
+        /// </summary>
         public void Erase()
         {
             foreach (var square in Squares)
@@ -53,6 +81,11 @@ namespace Tetris
             }
         }
 
+        /// <summary>
+        /// Bouge le bloc en fonction de la différence inscrite
+        /// </summary>
+        /// <param name="deltaX">différence en coordonnée X</param>
+        /// <param name="deltaY">différence en coordonnée Y</param>
         public void Move(int deltaX, int deltaY)
         {
             foreach (var square in Squares)
@@ -61,6 +94,13 @@ namespace Tetris
             }
         }
 
+        /// <summary>
+        /// Permet d'obtenir un bloc aléatoirement
+        /// </summary>
+        /// <param name="xPosition">position x du bloc</param>
+        /// <param name="yPosition">position y du bloc</param>
+        /// <returns>Un bloc compris dans la liste de bloc trouvée plus bas</returns>
+        /// <exception cref="Exception">au cas ou</exception>
         static public Block GetRandomBlock(int xPosition, int yPosition)
         {
             Random random = new Random();
@@ -78,6 +118,6 @@ namespace Tetris
             }
         }
 
-        public abstract List<(int row, int col)> GetRotatedPositions();
+        
     }
 }

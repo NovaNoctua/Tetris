@@ -13,9 +13,15 @@ namespace Tetris
     /// </summary>
     static class Config
     {
-        public const int SCREEN_HEIGHT = 55;
-        public const int SCREEN_WIDTH = 150;
+        // Déclaration et initialisation des constantes **********************************
+        public const int SCREEN_HEIGHT = 55;    // hauteur de l'écran
+        public const int SCREEN_WIDTH = 150;    // largeur de l'écran
 
+        // Déclaration et implémentation des méthodes ************************************
+
+        /// <summary>
+        /// Calibre la taille de l'écran et le buffer
+        /// </summary>
         public static void GameSize()
         {
             Console.SetWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);

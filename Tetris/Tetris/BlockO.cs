@@ -15,6 +15,8 @@ namespace Tetris
     /// </summary>
     internal class BlockO : Block
     {
+        // Déclaration du constructeur *************************************************
+
         public BlockO(int startX, int startY) 
         {
             _squares = new List<Square>
@@ -27,24 +29,20 @@ namespace Tetris
             _position = new Position(startX, startY);
         }
 
+        // Déclaration et implémentation des méthodes ***********************************
+
+        /// <summary>
+        /// Faire rotationner le bloc
+        /// </summary>
         public override void Rotate()
         {
            
         }
 
-        public override List<(int row, int col)> GetRotatedPositions()
-        {
-            // Le bloc O n'a pas de changement de forme, donc ses positions restent identiques à chaque rotation
-            List<(int row, int col)> rotatedPositions = new List<(int row, int col)>();
-
-            foreach (var square in _squares)
-            {
-                rotatedPositions.Add((square.position.Row, square.position.Column));  // Ajoute simplement les positions actuelles
-            }
-
-            return rotatedPositions;
-        }
-
+        /// <summary>
+        /// Clone le bloc
+        /// </summary>
+        /// <returns></returns>
         public override Block Clone()
         {
             // Créer une nouvelle instance avec la position actuelle

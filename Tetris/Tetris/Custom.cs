@@ -13,14 +13,11 @@ namespace Tetris
     /// </summary>
     internal static class Custom
     {
-        private static Random random = new Random();
+        // Déclaration et initialisation des attributs ***************************************
 
-        public static int GetRandomColorIndex()
-        {
-            return random.Next(Colors.Length);
-        }
+        private static Random random = new Random();        // permet l'aléatoire
 
-        public static readonly ConsoleColor[] Colors = {
+        public static readonly ConsoleColor[] Colors = {    // couleur aléatoire de la console
             ConsoleColor.DarkBlue,
             ConsoleColor.DarkGreen,
             ConsoleColor.DarkCyan,
@@ -34,6 +31,19 @@ namespace Tetris
             ConsoleColor.Magenta,
             ConsoleColor.Yellow
         };
+
+        // Déclaration et implémentation des méthodes ****************************************
+
+        /// <summary>
+        /// Retourne un index aléatoire de Colors
+        /// </summary>
+        /// <returns></returns>
+        public static int GetRandomColorIndex()
+        {
+            return random.Next(Colors.Length);
+        }
+
+        
 
     }
 }

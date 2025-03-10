@@ -16,12 +16,15 @@ namespace Tetris
     /// </summary>
     internal class Game
     {
-        [DllImport("user32.dll")]
-        private static extern short GetAsyncKeyState(int vKey);
+        // Déclaration et initialisation des constantes *********************************
         private const int VK_SPACE = 0x20;
         private const int VK_LEFT = 0x25;
         private const int VK_RIGHT = 0x27;       
         private const int VK_DOWN = 0x28;
+        private const byte STARTING_Y_POSITION = 0;
+        private const byte STARTING_X_POSITION = 7;
+
+        // Déclaration et initialisation des attributs **********************************
         private GameGrid grid;
         private int blockFallsAfter = 500;
         private int coolDownMovement = 100;
@@ -35,10 +38,7 @@ namespace Tetris
         private int score;
         private Block _nextBlock;
 
-
-        private const byte STARTING_Y_POSITION = 0;
-        private const byte STARTING_X_POSITION = 7;
-
+        // Déclaration des propriétés ***************************************************
         public int LinesDestroyed 
         {
             get
@@ -50,6 +50,12 @@ namespace Tetris
                 _linesDestroyed = value;
             }
         }
+
+        // Déclaration et implémentation des méthodes ***********************************
+
+        /// <summary>
+        /// Initialise les principales variables et affiche toutes les choses importantes
+        /// </summary>
         public void Initialize()
         {
             grid = new GameGrid(20, 20);
@@ -59,6 +65,9 @@ namespace Tetris
             _nextBlock = Block.GetRandomBlock(STARTING_X_POSITION, STARTING_Y_POSITION);
         }
 
+        /// <summary>
+        /// Boucle de jeu à faire tourner ne boucle
+        /// </summary>
         public void GameLoop()
         {
             Block blockFalling = _nextBlock;
@@ -141,6 +150,10 @@ namespace Tetris
                 ShowScore();
             }
         }
+
+        /// <summary>
+        /// Fin du jeu
+        /// </summary>
         public void EndScreen()
         {
             Console.ForegroundColor = ConsoleColor.White;
@@ -153,6 +166,18 @@ namespace Tetris
 
             Console.ReadLine();
         }
+
+        /// <summary>
+        /// Permet de savoir en permanence si une touche est appuyée ou non
+        /// </summary>
+        /// <param name="vKey">clé virtuelle</param>
+        /// <returns></returns>
+        [DllImport("user32.dll")]
+        private static extern short GetAsyncKeyState(int vKey);
+
+        /// <summary>
+        /// Affiche tous les blocs
+        /// </summary>
         private void DisplayAllBlocks()
         {
             // Clear the entire grid area first
@@ -173,7 +198,9 @@ namespace Tetris
             }
         }
 
-
+        /// <summary>
+        /// Efface tous les blocs dans la grille de jeu
+        /// </summary>
         private void ClearConsoleGrid()
         {
             for (int i = 0; i < grid.Column * 2; i++)
@@ -186,6 +213,9 @@ namespace Tetris
             }
         }
 
+        /// <summary>
+        /// Mets à jour la position de square
+        /// </summary>
         private void UpdateSquarePosition()
         {
             for (int i = 0; i < grid.Row; i++)
@@ -200,6 +230,9 @@ namespace Tetris
             }
         }
 
+        /// <summary>
+        /// Affiche les scores
+        /// </summary>
         private void ShowScore()
         {
             Console.ForegroundColor = ConsoleColor.White;
@@ -207,6 +240,10 @@ namespace Tetris
             Console.SetCursorPosition(grid.Row * 3 - 3, 3);
             Console.Write($"Score : {score}");
         }
+
+        /// <summary>
+        /// Efface les scores
+        /// </summary>
         private void DestroyScore()
         {
             Console.SetCursorPosition(grid.Row * 3 - 3, 3);

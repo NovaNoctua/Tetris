@@ -14,7 +14,9 @@ namespace Tetris
     /// Block en forme de L
     /// </summary>
     internal class BlockL : Block
-    {        
+    {
+        // Déclaration du constructeur *************************************************
+
         /// <summary>
         /// 
         /// </summary>
@@ -34,6 +36,11 @@ namespace Tetris
             _rotationState = 0;
         }
 
+        // Déclaration et implémentation des méthodes ***********************************
+
+        /// <summary>
+        /// Faire rotationner le bloc
+        /// </summary>
         public override void Rotate()
         {
             Square pivot = _squares[1];
@@ -72,41 +79,10 @@ namespace Tetris
             }
         }
 
-        public override List<(int row, int col)> GetRotatedPositions()
-        {
-            // On commence par récupérer la position du pivot
-            Square pivot = _squares[1];
-            List<(int row, int col)> rotatedPositions = new List<(int row, int col)>();
-
-            // On applique la logique de rotation selon l'état de rotation actuel
-            if (_rotationState == 0)
-            {
-                rotatedPositions.Add((pivot.position.Row, pivot.position.Column - 2)); // carré 0
-                rotatedPositions.Add((pivot.position.Row, pivot.position.Column + 2)); // carré 2
-                rotatedPositions.Add((pivot.position.Row + 3, pivot.position.Column + 2)); // carré 3
-            }
-            else if (_rotationState == 1)
-            {
-                rotatedPositions.Add((pivot.position.Row + 3, pivot.position.Column)); // carré 0
-                rotatedPositions.Add((pivot.position.Row - 3, pivot.position.Column)); // carré 2
-                rotatedPositions.Add((pivot.position.Row - 3, pivot.position.Column + 2)); // carré 3
-            }
-            else if (_rotationState == 2)
-            {
-                rotatedPositions.Add((pivot.position.Row, pivot.position.Column + 2)); // carré 0
-                rotatedPositions.Add((pivot.position.Row, pivot.position.Column - 2)); // carré 2
-                rotatedPositions.Add((pivot.position.Row - 3, pivot.position.Column - 2)); // carré 3
-            }
-            else if (_rotationState == 3)
-            {
-                rotatedPositions.Add((pivot.position.Row - 3, pivot.position.Column)); // carré 0
-                rotatedPositions.Add((pivot.position.Row + 3, pivot.position.Column)); // carré 2
-                rotatedPositions.Add((pivot.position.Row + 3, pivot.position.Column - 2)); // carré 3
-            }
-
-            return rotatedPositions;
-        }
-
+        /// <summary>
+        /// Clone le bloc
+        /// </summary>
+        /// <returns></returns>
         public override Block Clone()
         {
             // Créer une nouvelle instance avec la position actuelle

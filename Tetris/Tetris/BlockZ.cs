@@ -14,7 +14,11 @@ namespace Tetris
     /// </summary>
     internal class BlockZ : Block
     {
+        // Déclaration des attributs ***************************************************
+
         private bool _isHorizontal;
+
+        // Déclaration du constructeur *************************************************
 
         public BlockZ(int startX, int startY)
         {
@@ -29,6 +33,11 @@ namespace Tetris
             _isHorizontal = true;
         }
 
+        // Déclaration et implémentation des méthodes ***********************************
+
+        /// <summary>
+        /// Faire rotationner le bloc
+        /// </summary>
         public override void Rotate()
         {
             Square pivot = _squares[2];
@@ -51,35 +60,16 @@ namespace Tetris
             }
         }
 
-        public override List<(int row, int col)> GetRotatedPositions()
-        {
-            Square pivot = _squares[2];
-            List<(int row, int col)> rotatedPositions = new List<(int row, int col)>();
-
-            if (_isHorizontal)
-            {
-                rotatedPositions.Add((pivot.position.Row + 3, pivot.position.Column - 2));  // Position de _squares[0]
-                rotatedPositions.Add((pivot.position.Row + 3, pivot.position.Column));      // Position de _squares[1]
-                rotatedPositions.Add((pivot.position.Row, pivot.position.Column + 2));      // Position de _squares[3]
-            }
-            else
-            {
-                rotatedPositions.Add((pivot.position.Row - 3, pivot.position.Column - 2));  // Position de _squares[0]
-                rotatedPositions.Add((pivot.position.Row, pivot.position.Column - 2));      // Position de _squares[1]
-                rotatedPositions.Add((pivot.position.Row + 3, pivot.position.Column));      // Position de _squares[3]
-            }
-
-            return rotatedPositions;
-        }
-
-
+        /// <summary>
+        /// Clone le bloc
+        /// </summary>
+        /// <returns></returns>
         public override Block Clone()
         {
             // Créer une nouvelle instance avec la position actuelle
             BlockZ clone = new BlockZ(_position.Row, _position.Column);
 
             // Copier l'état de rotation
-            //clone._rotationState = this._rotationState;
             clone._isHorizontal = this._isHorizontal;
 
             // Copier la liste des carrés avec la bonne couleur
