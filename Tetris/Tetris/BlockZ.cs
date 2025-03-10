@@ -79,7 +79,8 @@ namespace Tetris
             BlockZ clone = new BlockZ(_position.Row, _position.Column);
 
             // Copier l'état de rotation
-            clone._rotationState = this._rotationState;
+            //clone._rotationState = this._rotationState;
+            clone._isHorizontal = this._isHorizontal;
 
             // Copier la liste des carrés avec la bonne couleur
             clone._squares = this._squares.Select(s => new Square(s.position.Row, s.position.Column, Custom.Colors.ToList().IndexOf(s.Color))).ToList();

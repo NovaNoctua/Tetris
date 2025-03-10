@@ -178,17 +178,6 @@ namespace Tetris
             return cleared;
         }
 
-        //public void FullBlockDisplay()
-        //{
-        //    for(int i = 0; i < SquareGrid.GetLength(0); i++)
-        //    {
-        //        for(int j = 0; j < SquareGrid.GetLength(1); j++)
-        //        {
-        //            Console.SetCursorPosition();
-        //        }
-        //    }
-        //}
-
         /// <summary>
         /// Affiche la grille de jeu
         /// </summary>
