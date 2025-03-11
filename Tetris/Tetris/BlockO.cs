@@ -52,7 +52,7 @@ namespace Tetris
             clone._rotationState = this._rotationState;
 
             // Copier la liste des carrés avec la bonne couleur
-            clone._squares = this._squares.Select(s => new Square(s.position.Row, s.position.Column, Custom.Colors.ToList().IndexOf(s.Color))).ToList();
+            clone._squares = this._squares.Select(s => new Square(s.Position.Row, s.Position.Column, Custom.Colors.ToList().IndexOf(s.Color))).ToList();
 
             return clone;
         }

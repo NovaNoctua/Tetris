@@ -44,17 +44,17 @@ namespace Tetris
 
             if(_isHorizontal)
             {
-                _squares[0].SetPosition(pivot.position.Row, pivot.position.Column - 2);
-                _squares[2].SetPosition(pivot.position.Row + 3, pivot.position.Column);
-                _squares[3].SetPosition(pivot.position.Row + 3, pivot.position.Column + 2);
+                _squares[0].SetPosition(pivot.Position.Row, pivot.Position.Column - 2);
+                _squares[2].SetPosition(pivot.Position.Row + 3, pivot.Position.Column);
+                _squares[3].SetPosition(pivot.Position.Row + 3, pivot.Position.Column + 2);
 
                 _isHorizontal = false;
             }
             else
             {
-                _squares[0].SetPosition(pivot.position.Row - 3, pivot.position.Column);
-                _squares[2].SetPosition(pivot.position.Row, pivot.position.Column - 2);
-                _squares[3].SetPosition(pivot.position.Row + 3, pivot.position.Column - 2);
+                _squares[0].SetPosition(pivot.Position.Row - 3, pivot.Position.Column);
+                _squares[2].SetPosition(pivot.Position.Row, pivot.Position.Column - 2);
+                _squares[3].SetPosition(pivot.Position.Row + 3, pivot.Position.Column - 2);
 
                 _isHorizontal = true;
             }
@@ -73,7 +73,7 @@ namespace Tetris
             clone._isHorizontal = this._isHorizontal;
 
             // Copier la liste des carrés avec la bonne couleur
-            clone._squares = this._squares.Select(s => new Square(s.position.Row, s.position.Column, Custom.Colors.ToList().IndexOf(s.Color))).ToList();
+            clone._squares = this._squares.Select(s => new Square(s.Position.Row, s.Position.Column, Custom.Colors.ToList().IndexOf(s.Color))).ToList();
 
             return clone;
         }

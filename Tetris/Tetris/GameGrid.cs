@@ -14,13 +14,17 @@ namespace Tetris
     /// </summary>
     internal class GameGrid
     {
-        //properties
+        // Déclaration des attributs *********************************************
+
         private readonly int _row;
         private readonly int _column;
         private bool[,] _grid;                  // false = vide, true = occupé
         private Square[,] _squareGrid;
         private int _cursorXPosition = 5;       // la position X du curseur
         private int _cursorYPosition = 5;       // la position Y du curseur
+
+
+        // Déclaration des propriétés ********************************************
 
         public int Row
         {
@@ -62,7 +66,13 @@ namespace Tetris
             }
         }
 
-        // Constructeur personnalisé
+        // Déclaration du constructeur ********************************************
+
+        /// <summary>
+        /// Constructeur par défaut
+        /// </summary>
+        /// <param name="row">ligne</param>
+        /// <param name="column">nombre de colonnes</param>
         public GameGrid(int row, int column)
         {
             _row = row;
@@ -70,6 +80,8 @@ namespace Tetris
             _grid = new bool[Row, Column];
             _squareGrid = new Square[Row, Column];
         }
+
+        // Déclaration et implémentation des méthodes ******************************
 
         /// <summary>
         /// Vérifie si une cellule est à l'intérieur de la grille
@@ -220,25 +232,39 @@ namespace Tetris
             _cursorYPosition = 5;
         }
 
+        /// <summary>
+        /// Crée un bloc dans les grilles de gestion
+        /// </summary>
+        /// <param name="block">bloc</param>
         public void CreateBlockInGrid(Block block)
         {
             foreach (Square square in block.Squares)
             {
-                Grid[(square.position.Row - 6) / 3, (square.position.Column - 6) / 2] = true;
-                SquareGrid[(square.position.Row - 6) / 3, (square.position.Column - 6) / 2] = new Square(square.position.Row, square.position.Column, square.ColorIndex);
+                Grid[(square.Position.Row - 6) / 3, (square.Position.Column - 6) / 2] = true;
+                SquareGrid[(square.Position.Row - 6) / 3, (square.Position.Column - 6) / 2] = new Square(square.Position.Row, square.Position.Column, square.ColorIndex);
             }
         }
 
+        /// <summary>
+        /// Détruit un bloc dans les grilles de gestion
+        /// </summary>
+        /// <param name="block"></param>
         private void DestroyBlockInGrid(Block block)
         {
             foreach (Square square in block.Squares)
             {
-                Grid[(square.position.Row - 6) / 3, (square.position.Column - 6) / 2] = false;
-                SquareGrid[(square.position.Row - 6) / 3, (square.position.Column - 6) / 2] = null;
+                Grid[(square.Position.Row - 6) / 3, (square.Position.Column - 6) / 2] = false;
+                SquareGrid[(square.Position.Row - 6) / 3, (square.Position.Column - 6) / 2] = null;
             }
         }
 
-
+        /// <summary>
+        /// Check si un bloc peut entrer à un endroit
+        /// </summary>
+        /// <param name="block">bloc</param>
+        /// <param name="deltaX">endroit x</param>
+        /// <param name="deltaY">endroit y</param>
+        /// <returns>booléen</returns>
         public bool CanBlockFit(Block block, int deltaX, int deltaY)
         {
             // Récupère les positions actuelles (indices de grille) occupées par le block
@@ -246,8 +272,8 @@ namespace Tetris
             foreach (Square square in block.Squares)
             {
                 // Convertit la position du carré en indices de grille
-                int curRow = (square.position.Row - 6) / 3;  // Calcul pour obtenir la ligne dans la grille
-                int curCol = (square.position.Column - 6) / 2;  // Calcul pour obtenir la colonne dans la grille
+                int curRow = (square.Position.Row - 6) / 3;  // Calcul pour obtenir la ligne dans la grille
+                int curCol = (square.Position.Column - 6) / 2;  // Calcul pour obtenir la colonne dans la grille
 
                 // Ajoute la position actuelle à l'ensemble des positions du bloc
                 currentPositions.Add((curRow, curCol));
@@ -257,8 +283,8 @@ namespace Tetris
             foreach (Square square in block.Squares)
             {
                 // Calcul de la nouvelle position dans la grille en tenant compte du déplacement
-                int newRow = (square.position.Row - 6) / 3 + deltaX;  // Applique le décalage deltaX à la ligne
-                int newCol = (square.position.Column - 6) / 2 + deltaY;  // Applique le décalage deltaY à la colonne
+                int newRow = (square.Position.Row - 6) / 3 + deltaX;  // Applique le décalage deltaX à la ligne
+                int newCol = (square.Position.Column - 6) / 2 + deltaY;  // Applique le décalage deltaY à la colonne
 
                 if (newRow < 0 || newRow >= Grid.GetLength(0) || newCol < 0 || newCol >= Grid.GetLength(1))
                 {
@@ -286,16 +312,25 @@ namespace Tetris
 
         }
 
+        /// <summary>
+        /// Bouge un bloc dans la grille 
+        /// </summary>
+        /// <param name="block">bloc</param>
+        /// <param name="deltaX">différence x</param>
+        /// <param name="deltaY">différence y</param>
         public void MoveBlock(Block block, int deltaX, int deltaY)
         {
             DestroyBlockInGrid(block);
             foreach (Square square in block.Squares)
             {
-                Grid[(square.position.Row - 6) / 3 + deltaX, (square.position.Column - 6) / 2 + deltaY] = true;
-                SquareGrid[(square.position.Row - 6) / 3 + deltaX, (square.position.Column - 6) / 2 + deltaY] = new Square(square.position.Row, square.position.Column, square.ColorIndex);
+                Grid[(square.Position.Row - 6) / 3 + deltaX, (square.Position.Column - 6) / 2 + deltaY] = true;
+                SquareGrid[(square.Position.Row - 6) / 3 + deltaX, (square.Position.Column - 6) / 2 + deltaY] = new Square(square.Position.Row, square.Position.Column, square.ColorIndex);
             }
         }
 
+        /// <summary>
+        /// Pour afficher la grille de gestion (pour le debug)
+        /// </summary>
         public void DisplayGridInt()
         {
             for (int i = 0; i < Column; i++)
@@ -307,6 +342,10 @@ namespace Tetris
                 }
             }
         }
+
+        /// <summary>
+        /// Pour afficher la grille de gestion (pour le debug)
+        /// </summary>
         public void DisplayGridSquare()
         {
             for (int i = 0; i < Column; i++)
@@ -326,6 +365,11 @@ namespace Tetris
             }
         }
 
+        /// <summary>
+        /// Check si on peut rotationner un bloc
+        /// </summary>
+        /// <param name="block"></param>
+        /// <returns></returns>
         public bool CanBlockRotate(Block block)
         {
             Block clone = block.Clone();
@@ -339,6 +383,10 @@ namespace Tetris
             return false;
         }
 
+        /// <summary>
+        /// Fais rotationner un bloc
+        /// </summary>
+        /// <param name="block"></param>
         public void RotateBlock(Block block)
         {
             DestroyBlockInGrid(block);

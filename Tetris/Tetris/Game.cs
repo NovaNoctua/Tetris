@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 
 namespace Tetris
@@ -144,6 +145,7 @@ namespace Tetris
 
             if (LinesDestroyed > 0)
             {
+                Thread.Sleep(500);
                 DisplayAllBlocks();
                 score += LinesDestroyed * 500;
                 LinesDestroyed = 0;             
@@ -224,7 +226,7 @@ namespace Tetris
                 {
                     if (grid.SquareGrid[i, j] != null)
                     {
-                        grid.SquareGrid[i, j].position = new Position(6 + 3 * i, 6 + 2 * j);
+                        grid.SquareGrid[i, j].Position = new Position(6 + 3 * i, 6 + 2 * j);
                     }                   
                 }
             }

@@ -11,9 +11,11 @@ namespace Tetris
     /// </summary>
     internal class Position
     {
+        // Déclaration des propriétés *********************************
         public int Row { get ; set; }
         public int Column { get ; set; }
 
+        // Déclaration du constructeur ********************************
         public Position(int row, int column)
         {
             Row = row;

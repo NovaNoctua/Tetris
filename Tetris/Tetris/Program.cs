@@ -13,18 +13,26 @@ namespace Tetris
     {
         static void Main(string[] args)
         {
+            // Déclaration et initialisation de la variable de jeu
+            Game game = new Game();
+
+            // Programme principal *****************************************
+
+            // Introduction et mise en place des paramètres de jeu de la fenêtre
             Console.CursorVisible = false;
             Start.Introduction();
             Config.GameSize();
 
-            Game game = new Game();
-
+            // Initialisation du jeu
             game.Initialize();
 
+            // boucle de jeu
             while(!game.endGame)
             {
                 game.GameLoop();
             }
+
+            // fin du jeu
             game.EndScreen();
         }
     }

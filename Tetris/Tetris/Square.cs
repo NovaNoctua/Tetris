@@ -13,28 +13,45 @@ namespace Tetris
     /// </summary>
     internal class Square
     {
-        /// <summary>
-        /// Attributs of square
-        /// </summary>
-        public Position position;
+        // Déclaration des attributs *********************************
+
+        private Position _position;
         private readonly ConsoleColor _color;          //color of the square
         private readonly int _colorIndex;
+        private string[] _model =
+        {
+            "╔═╗",
+            "╚═╝"
+        };
+
+        // Déclaration des propriétés ********************************
+        public Position Position
+        {
+            get
+            {
+                return _position;
+            }
+            set
+            {
+                _position = value;
+            }
+        }
+
         public ConsoleColor Color => _color;
         public int ColorIndex => _colorIndex;
 
-        //model of the square
-        private string[] models = 
-        { 
-            "╔═╗", 
-            "╚═╝" 
-        };
+
+        // Déclaration des constructeurs *****************************
 
         public Square(int xPosition, int yPosition, int colorIndex)
         {
-            position = new Position(xPosition, yPosition);
+            Position = new Position(xPosition, yPosition);
             _colorIndex = colorIndex;
             _color = Custom.Colors[colorIndex];
         }
+
+
+        // Déclaration et implémentation des méthodes ****************
 
         /// <summary>
         /// Displays the square
@@ -44,10 +61,10 @@ namespace Tetris
             //changes color
             Console.ForegroundColor = _color;
 
-            for(int i = 0; i < models.Length; i++)
+            for(int i = 0; i < _model.Length; i++)
             {
-                Console.SetCursorPosition(position.Row, position.Column + i);
-                Console.WriteLine(models[i]);
+                Console.SetCursorPosition(Position.Row, Position.Column + i);
+                Console.WriteLine(_model[i]);
             }          
         }
 
@@ -57,23 +74,33 @@ namespace Tetris
         /// </summary>
         public void Erase()
         {
-            for(int i = 0; i < models.Length; i++)
+            for(int i = 0; i < _model.Length; i++)
             {
-                Console.SetCursorPosition(position.Row, position.Column + i);
+                Console.SetCursorPosition(Position.Row, Position.Column + i);
                 Console.WriteLine("   ");
             }
         }
 
+        /// <summary>
+        /// Bouge le carré
+        /// </summary>
+        /// <param name="deltaX"></param>
+        /// <param name="deltaY"></param>
         public void Move(int deltaX, int deltaY)
         {
-            position.Row += deltaX; 
-            position.Column += deltaY;
+            Position.Row += deltaX; 
+            Position.Column += deltaY;
         }
 
+        /// <summary>
+        /// Donne une nouvelle position au carré
+        /// </summary>
+        /// <param name="newRow"></param>
+        /// <param name="newColumn"></param>
         public void SetPosition(int newRow, int newColumn)
         {
-            position.Row = newRow;
-            position.Column = newColumn;    
+            Position.Row = newRow;
+            Position.Column = newColumn;    
         }
     }
 }
