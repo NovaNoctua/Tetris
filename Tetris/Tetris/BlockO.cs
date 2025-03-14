@@ -17,7 +17,7 @@ namespace Tetris
     {
         // Déclaration du constructeur *************************************************
 
-        public BlockO(int startX, int startY) 
+        public BlockO(int startX, int startY)
         {
             _squares = new List<Square>
             {
@@ -31,12 +31,24 @@ namespace Tetris
 
         // Déclaration et implémentation des méthodes ***********************************
 
+        public override void MoveBlock(int x, int y)
+        {
+            Position = new Position(x, y);
+            _squares = new List<Square>
+            {
+                new Square(6 + 3 * (x), 6 + 2 * (y), _color),
+                new Square(6 + 3 * (x) + 3, 6 + 2 * (y), _color),
+                new Square(6 + 3 * (x), 6 + 2 * (y) + 2, _color),
+                new Square(6 + 3 * (x) + 3, 6 + 2 * (y) + 2, _color)
+            };
+        }
+
         /// <summary>
         /// Faire rotationner le bloc
         /// </summary>
         public override void Rotate()
         {
-           
+
         }
 
         /// <summary>

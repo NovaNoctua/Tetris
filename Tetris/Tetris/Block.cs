@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Tetris
 {
@@ -32,6 +33,10 @@ namespace Tetris
             get
             {
                 return _position;
+            }
+            set
+            {
+                _position = value;
             }
         }
 
@@ -118,6 +123,6 @@ namespace Tetris
             }
         }
 
-        
+        public abstract void MoveBlock(int x, int y);
     }
 }

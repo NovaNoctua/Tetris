@@ -18,26 +18,29 @@ namespace Tetris
     internal class Game
     {
         // Déclaration et initialisation des constantes *********************************
-        private const int VK_SPACE = 0x20;
-        private const int VK_LEFT = 0x25;
-        private const int VK_RIGHT = 0x27;       
-        private const int VK_DOWN = 0x28;
-        private const byte STARTING_Y_POSITION = 0;
-        private const byte STARTING_X_POSITION = 7;
+        private const int _VK_SPACE = 0x20;                         // clé virtuelle de la barre espace
+        private const int _VK_LEFT = 0x25;                          // clé virtuelle de la flèche gauche
+        private const int _VK_RIGHT = 0x27;                         // clé virtuelle de la flèche droite
+        private const int _VK_DOWN = 0x28;                          // clé virtuelle de la flèche du bas
+        private const byte _STARTING_Y_POSITION = 0;                // position y de commencement
+        private const byte _STARTING_X_POSITION = _WIDTH / 2 - 2;   // position x de commencement
+        private const byte _WIDTH = 15;                             // largeur de la grille
+        private const byte _HEIGHT = 20;                            // hauteur de la grille
+        private const int _SCORE_ADDER = 500;                       // nombre de score par ligne détruite
 
         // Déclaration et initialisation des attributs **********************************
-        private GameGrid grid;
-        private int blockFallsAfter = 500;
-        private int coolDownMovement = 100;
-        private DateTime startCoolDown;
-        private DateTime endCoolDown;
-        private DateTime startOfTurn;
-        private DateTime endOfTurn;
-        private readonly List<Block> allBlocks = new List<Block>();
-        public bool endGame;
-        private int _linesDestroyed;
-        private int score;
-        private Block _nextBlock;
+        private GameGrid grid;                                          // grille de jeu
+        private int blockFallsAfter = 500;                              // temps de cooldown avant qu'un bloc tombe
+        private int cooldownMovement = 100;                             // temps de cooldown avant chaque input
+        private DateTime startCoolDown;                                 // début du cooldown
+        private DateTime endCoolDown;                                   // fin du cooldown
+        private DateTime startOfTurn;                                   // début du tour
+        private DateTime endOfTurn;                                     // fin du tour
+        private readonly List<Block> allBlocks = new List<Block>();     // liste de tous les blocs
+        public bool endGame;                                            // fin du jeu
+        private int _linesDestroyed;                                    // lignes détruites
+        private int score;                                              // score du jeu
+        private Block _nextBlock;                                       // prochain bloc
 
         // Déclaration des propriétés ***************************************************
         public int LinesDestroyed 
@@ -59,11 +62,11 @@ namespace Tetris
         /// </summary>
         public void Initialize()
         {
-            grid = new GameGrid(20, 20);
+            grid = new GameGrid(_WIDTH, _HEIGHT);
             grid.Display();
             endGame = false;
             ShowScore();
-            _nextBlock = Block.GetRandomBlock(STARTING_X_POSITION, STARTING_Y_POSITION);
+            _nextBlock = Block.GetRandomBlock(_WIDTH + 2, 1);
         }
 
         /// <summary>
@@ -72,7 +75,9 @@ namespace Tetris
         public void GameLoop()
         {
             Block blockFalling = _nextBlock;
-            _nextBlock = Block.GetRandomBlock(STARTING_X_POSITION, STARTING_Y_POSITION);
+            blockFalling.MoveBlock(_STARTING_X_POSITION, _STARTING_Y_POSITION);
+            _nextBlock = Block.GetRandomBlock(_WIDTH + 2, 2);
+            ShowNextBlock();
             allBlocks.Add(blockFalling);
             grid.CreateBlockInGrid(blockFalling);
             if (!grid.CanBlockFit(blockFalling, 0, 1))
@@ -87,7 +92,7 @@ namespace Tetris
                 endCoolDown = DateTime.Now;
                 blockFalling.Display();
 
-                if ((GetAsyncKeyState(VK_RIGHT) & 0x8000) != 0 && (endCoolDown - startCoolDown).TotalMilliseconds > coolDownMovement)
+                if ((GetAsyncKeyState(_VK_RIGHT) & 0x8000) != 0 && (endCoolDown - startCoolDown).TotalMilliseconds > cooldownMovement)
                 {
                     if (grid.CanBlockFit(blockFalling, 1, 0))
                     {
@@ -98,7 +103,7 @@ namespace Tetris
                         startCoolDown = DateTime.Now;
                     }
                 }
-                else if ((GetAsyncKeyState(VK_LEFT) & 0x8000) != 0 && (endCoolDown - startCoolDown).TotalMilliseconds > coolDownMovement)
+                else if ((GetAsyncKeyState(_VK_LEFT) & 0x8000) != 0 && (endCoolDown - startCoolDown).TotalMilliseconds > cooldownMovement)
                 {
                     if (grid.CanBlockFit(blockFalling, -1, 0))
                     {
@@ -109,7 +114,7 @@ namespace Tetris
                         startCoolDown = DateTime.Now;
                     }
                 }
-                else if ((GetAsyncKeyState(VK_DOWN) & 0x8000) != 0 && (endCoolDown - startCoolDown).TotalMilliseconds > coolDownMovement)
+                else if ((GetAsyncKeyState(_VK_DOWN) & 0x8000) != 0 && (endCoolDown - startCoolDown).TotalMilliseconds > cooldownMovement)
                 {
                     if (grid.CanBlockFit(blockFalling, 0, 1))
                     {
@@ -120,7 +125,7 @@ namespace Tetris
                         startCoolDown = DateTime.Now;
                     }
                 }
-                else if ((GetAsyncKeyState(VK_SPACE) & 0x8000) != 0 && (endCoolDown - startCoolDown).TotalMilliseconds > coolDownMovement)
+                else if ((GetAsyncKeyState(_VK_SPACE) & 0x8000) != 0 && (endCoolDown - startCoolDown).TotalMilliseconds > cooldownMovement)
                 {
                     if (grid.CanBlockRotate(blockFalling))
                     {
@@ -147,7 +152,7 @@ namespace Tetris
             {
                 Thread.Sleep(500);
                 DisplayAllBlocks();
-                score += LinesDestroyed * 500;
+                score += LinesDestroyed * _SCORE_ADDER;
                 LinesDestroyed = 0;             
                 ShowScore();
             }
@@ -164,7 +169,7 @@ namespace Tetris
             Console.SetCursorPosition(10 + grid.Row * 3, 6);
             Console.Write($"Vous avez fait un score de {score}.");
             Console.SetCursorPosition(10 + grid.Row * 3, 6);
-            Console.Write($"Nombre de lignes détruite(s) : {score / 500}");
+            Console.Write($"Nombre de lignes détruite(s) : {score / _SCORE_ADDER}");
 
             Console.ReadLine();
         }
@@ -241,6 +246,8 @@ namespace Tetris
             DestroyScore();
             Console.SetCursorPosition(grid.Row * 3 - 3, 3);
             Console.Write($"Score : {score}");
+            Console.SetCursorPosition(grid.Row * 3 - 24, 4);
+            Console.Write($"Nombre de lignes détruites : {score / 500}");
         }
 
         /// <summary>
@@ -250,6 +257,26 @@ namespace Tetris
         {
             Console.SetCursorPosition(grid.Row * 3 - 3, 3);
             Console.Write("        ");
+        }
+
+        private void ShowNextBlock()
+        {
+            Console.ForegroundColor= ConsoleColor.White;
+            Console.SetCursorPosition(7 + _WIDTH * 3, 8);
+            Console.Write("|---------------|");
+
+            for (int i = 9; i < 19; i++)
+            {
+                Console.SetCursorPosition(7 + _WIDTH * 3, i);
+                Console.Write("|               |");
+            }
+
+            Console.SetCursorPosition(7 + _WIDTH * 3, 19);
+            Console.Write("|---------------|");
+            Console.SetCursorPosition(7 + _WIDTH * 3, 20);
+            Console.Write("  PROCHAIN BLOC");
+
+            _nextBlock.Display();
         }
     }
 }
