@@ -42,19 +42,6 @@ namespace Tetris
         private int score;                                              // score du jeu
         private Block _nextBlock;                                       // prochain bloc
 
-        // Déclaration des propriétés ***************************************************
-        public int LinesDestroyed 
-        {
-            get
-            {
-                return _linesDestroyed;
-            }
-            set
-            {
-                _linesDestroyed = value;
-            }
-        }
-
         // Déclaration et implémentation des méthodes ***********************************
 
         /// <summary>
@@ -74,28 +61,45 @@ namespace Tetris
         /// </summary>
         public void GameLoop()
         {
+            // bloc en prenant le prochain
             Block blockFalling = _nextBlock;
             blockFalling.MoveBlock(_STARTING_X_POSITION, _STARTING_Y_POSITION);
+
+            // on remet le prochain bloc
             _nextBlock = Block.GetRandomBlock(_WIDTH + 2, 2);
             ShowNextBlock();
+
+            // ajoute le bloc au bon endroit
             allBlocks.Add(blockFalling);
             grid.CreateBlockInGrid(blockFalling);
+
+            // s'il peut être placé on continue le jeu
             if (!grid.CanBlockFit(blockFalling, 0, 1))
             {
                 endGame = true;
             }
+
+            // début des cooldowns
             startOfTurn = DateTime.Now;
             startCoolDown = DateTime.Now;
+
+            // tant que le bloc peut descendre
             while (grid.CanBlockFit(blockFalling, 0, 1))
             {
+                // début la fin du tour
                 endOfTurn = DateTime.Now;
                 endCoolDown = DateTime.Now;
+
+                // affiche le bloc
                 blockFalling.Display();
 
+                // flèche de droite
                 if ((GetAsyncKeyState(_VK_RIGHT) & 0x8000) != 0 && (endCoolDown - startCoolDown).TotalMilliseconds > cooldownMovement)
                 {
+                    // s'il peut aller à droite
                     if (grid.CanBlockFit(blockFalling, 1, 0))
                     {
+                        // bouge le bloc à droite commence le cooldown et efface le précédent bloc
                         grid.MoveBlock(blockFalling, 1, 0);
                         blockFalling.Erase();
                         blockFalling.Move(3, 0);
@@ -103,8 +107,11 @@ namespace Tetris
                         startCoolDown = DateTime.Now;
                     }
                 }
+
+                // flèche de gauche
                 else if ((GetAsyncKeyState(_VK_LEFT) & 0x8000) != 0 && (endCoolDown - startCoolDown).TotalMilliseconds > cooldownMovement)
                 {
+                    // bouge le bloc à gauche si c'est possible
                     if (grid.CanBlockFit(blockFalling, -1, 0))
                     {
                         grid.MoveBlock(blockFalling, -1, 0);
@@ -114,8 +121,11 @@ namespace Tetris
                         startCoolDown = DateTime.Now;
                     }
                 }
+
+                // flèche du bas
                 else if ((GetAsyncKeyState(_VK_DOWN) & 0x8000) != 0 && (endCoolDown - startCoolDown).TotalMilliseconds > cooldownMovement)
                 {
+                    // bouge le bloc en bas si c'est possible
                     if (grid.CanBlockFit(blockFalling, 0, 1))
                     {
                         grid.MoveBlock(blockFalling, 0, 1);
@@ -125,8 +135,11 @@ namespace Tetris
                         startCoolDown = DateTime.Now;
                     }
                 }
+
+                // barre espace
                 else if ((GetAsyncKeyState(_VK_SPACE) & 0x8000) != 0 && (endCoolDown - startCoolDown).TotalMilliseconds > cooldownMovement)
                 {
+                    // fais rotationner le bloc si c'est possible
                     if (grid.CanBlockRotate(blockFalling))
                     {
                         grid.RotateBlock(blockFalling);
@@ -134,7 +147,7 @@ namespace Tetris
                     }
                 }
 
-
+                // après le cooldown, on finit le tour et on descend le bloc de 1
                 if (grid.CanBlockFit(blockFalling, 0, 1) && (endOfTurn - startOfTurn).Milliseconds > blockFallsAfter)
                 {
                     grid.MoveBlock(blockFalling, 0, 1);
@@ -146,14 +159,17 @@ namespace Tetris
 
                 
             }
-            LinesDestroyed += grid.ClearFullRow();
 
-            if (LinesDestroyed > 0)
+            // si y'a des lignes à détruire, on les détruit
+            _linesDestroyed += grid.ClearFullRow();
+
+            // augmente le score si des lignes ont été détruites
+            if (_linesDestroyed > 0)
             {
                 Thread.Sleep(500);
                 DisplayAllBlocks();
-                score += LinesDestroyed * _SCORE_ADDER;
-                LinesDestroyed = 0;             
+                score += _linesDestroyed * _SCORE_ADDER;
+                _linesDestroyed = 0;             
                 ShowScore();
             }
         }
@@ -163,6 +179,7 @@ namespace Tetris
         /// </summary>
         public void EndScreen()
         {
+            // Affichage d'un message de fin de jeu avec le score et le nombre de lignes détruites
             Console.ForegroundColor = ConsoleColor.White;
             Console.SetCursorPosition(10 + grid.Row * 3, 5);
             Console.Write("Dommage, vous avez perdu, la prochaine pièce n'a pas pu être placée");
@@ -259,6 +276,9 @@ namespace Tetris
             Console.Write("        ");
         }
 
+        /// <summary>
+        /// Affiche le prochain bloc à droite de la grille
+        /// </summary>
         private void ShowNextBlock()
         {
             Console.ForegroundColor= ConsoleColor.White;

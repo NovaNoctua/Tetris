@@ -15,16 +15,20 @@ namespace Tetris
     {
         // Déclaration des attributs *********************************
 
-        private Position _position;
-        private readonly ConsoleColor _color;          //color of the square
-        private readonly int _colorIndex;
-        private string[] _model =
+        private Position _position;                     // position of the square
+        private readonly ConsoleColor _color;           // color of the square
+        private readonly int _colorIndex;               // color index of the square
+        private string[] _model =                       // model of a square
         {
             "╔═╗",
             "╚═╝"
         };
 
         // Déclaration des propriétés ********************************
+
+        /// <summary>
+        /// Position du carré
+        /// </summary>
         public Position Position
         {
             get
@@ -37,12 +41,25 @@ namespace Tetris
             }
         }
 
+        /// <summary>
+        /// Couleur du carré
+        /// </summary>
         public ConsoleColor Color => _color;
+
+        /// <summary>
+        /// Index couleur du carré
+        /// </summary>
         public int ColorIndex => _colorIndex;
 
 
         // Déclaration des constructeurs *****************************
 
+        /// <summary>
+        /// Constructeur par défaut
+        /// </summary>
+        /// <param name="xPosition">position x</param>
+        /// <param name="yPosition">position y</param>
+        /// <param name="colorIndex">index de couleur</param>
         public Square(int xPosition, int yPosition, int colorIndex)
         {
             Position = new Position(xPosition, yPosition);

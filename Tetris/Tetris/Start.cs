@@ -14,6 +14,10 @@ namespace Tetris
     internal static class Start
     {
         // Déclaration et implémentation des méthodes ***********************************
+
+        /// <summary>
+        /// Message d'introduction du jeu
+        /// </summary>
         public static void Introduction()
         {
             Console.WriteLine("\t╔═══════════════════════════════════════════════╗");

@@ -16,16 +16,19 @@ namespace Tetris
     {
         // Déclaration des attributs *********************************************
 
-        private readonly int _row;
-        private readonly int _column;
+        private readonly int _row;              // nombre de lignes
+        private readonly int _column;           // nombre de colonnes
         private bool[,] _grid;                  // false = vide, true = occupé
-        private Square[,] _squareGrid;
+        private Square[,] _squareGrid;          // grille de square
         private int _cursorXPosition = 5;       // la position X du curseur
         private int _cursorYPosition = 5;       // la position Y du curseur
 
 
         // Déclaration des propriétés ********************************************
 
+        /// <summary>
+        /// Nombre de ligne
+        /// </summary>
         public int Row
         {
             get
@@ -34,6 +37,9 @@ namespace Tetris
             }
         }
 
+        /// <summary>
+        /// Nombre de colonne
+        /// </summary>
         public int Column
         {
             get
@@ -42,18 +48,9 @@ namespace Tetris
             }
         }
 
-        public bool[,] Grid
-        {
-            get
-            {
-                return _grid;
-            }
-            set
-            {
-                _grid = value;
-            }
-        }
-
+        /// <summary>
+        /// Grille de jeu avec les squares
+        /// </summary>
         public Square[,] SquareGrid
         {
             get
@@ -102,7 +99,7 @@ namespace Tetris
         /// <returns></returns>
         public bool isEmpty(int r, int c)
         {
-            return IsInside(r, c) && !Grid[r, c];
+            return IsInside(r, c) && !_grid[r, c];
         }
 
         /// <summary>
@@ -114,7 +111,7 @@ namespace Tetris
         {
             for (int i = 0; i < Row; i++)
             {
-                if (!Grid[i, r])
+                if (!_grid[i, r])
                 {
                     return false;
                 }
@@ -131,7 +128,7 @@ namespace Tetris
         {
             for (int i = 0; i < Column; i++)
             {
-                if (Grid[r, i])
+                if (_grid[r, i])
                 {
                     return false;
                 }
@@ -147,7 +144,7 @@ namespace Tetris
         {
             for (int i = 0; i < Row; i++)
             {
-                Grid[i, r] = false;
+                _grid[i, r] = false;
                 SquareGrid[i, r] = null;
             }
         }
@@ -161,8 +158,8 @@ namespace Tetris
         {
             for (int i = 0; i < Row; i++)
             {
-                Grid[i, r + numRow] = Grid[i, r];
-                Grid[i, r] = false;
+                _grid[i, r + numRow] = _grid[i, r];
+                _grid[i, r] = false;
                 SquareGrid[i, r + numRow] = SquareGrid[i, r];
                 SquareGrid[i, r] = null;
             }
@@ -240,7 +237,7 @@ namespace Tetris
         {
             foreach (Square square in block.Squares)
             {
-                Grid[(square.Position.Row - 6) / 3, (square.Position.Column - 6) / 2] = true;
+                _grid[(square.Position.Row - 6) / 3, (square.Position.Column - 6) / 2] = true;
                 SquareGrid[(square.Position.Row - 6) / 3, (square.Position.Column - 6) / 2] = new Square(square.Position.Row, square.Position.Column, square.ColorIndex);
             }
         }
@@ -253,7 +250,7 @@ namespace Tetris
         {
             foreach (Square square in block.Squares)
             {
-                Grid[(square.Position.Row - 6) / 3, (square.Position.Column - 6) / 2] = false;
+                _grid[(square.Position.Row - 6) / 3, (square.Position.Column - 6) / 2] = false;
                 SquareGrid[(square.Position.Row - 6) / 3, (square.Position.Column - 6) / 2] = null;
             }
         }
@@ -286,7 +283,7 @@ namespace Tetris
                 int newRow = (square.Position.Row - 6) / 3 + deltaX;  // Applique le décalage deltaX à la ligne
                 int newCol = (square.Position.Column - 6) / 2 + deltaY;  // Applique le décalage deltaY à la colonne
 
-                if (newRow < 0 || newRow >= Grid.GetLength(0) || newCol < 0 || newCol >= Grid.GetLength(1))
+                if (newRow < 0 || newRow >= _grid.GetLength(0) || newCol < 0 || newCol >= _grid.GetLength(1))
                 {
                     return false; // Si l'indice est en dehors des limites, retourner false immédiatement
                 }
@@ -295,7 +292,7 @@ namespace Tetris
                 {
                     // Si la nouvelle position n'est pas déjà occupée par un carré du même bloc
                     // et qu'elle est occupée dans la grille par un autre bloc, on ne peut pas y déplacer le bloc
-                    if (!currentPositions.Contains((newRow, newCol)) && Grid[newRow, newCol])
+                    if (!currentPositions.Contains((newRow, newCol)) && _grid[newRow, newCol])
                     {
                         return false;  // Retourne false si la position est déjà occupée
                     }
@@ -323,7 +320,7 @@ namespace Tetris
             DestroyBlockInGrid(block);
             foreach (Square square in block.Squares)
             {
-                Grid[(square.Position.Row - 6) / 3 + deltaX, (square.Position.Column - 6) / 2 + deltaY] = true;
+                _grid[(square.Position.Row - 6) / 3 + deltaX, (square.Position.Column - 6) / 2 + deltaY] = true;
                 SquareGrid[(square.Position.Row - 6) / 3 + deltaX, (square.Position.Column - 6) / 2 + deltaY] = new Square(square.Position.Row, square.Position.Column, square.ColorIndex);
             }
         }
@@ -338,7 +335,7 @@ namespace Tetris
                 Console.SetCursorPosition(80, i);
                 for (int j = 0; j < Row; j++)
                 {
-                    Console.Write(Grid[j, i] ? "1" : "0");
+                    Console.Write(_grid[j, i] ? "1" : "0");
                 }
             }
         }
