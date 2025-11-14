@@ -42,8 +42,5 @@ namespace Tetris
         {
             return random.Next(Colors.Length);
         }
-
-        
-
     }
 }
