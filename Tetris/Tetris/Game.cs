@@ -42,6 +42,9 @@ namespace Tetris
         private int score;                                              // score du jeu
         private Block _nextBlock;                                       // prochain bloc
 
+        private bool wasPaused = false;
+        public bool IsPaused { get; private set; } = false;             // Pause
+
         // Déclaration et implémentation des méthodes ***********************************
 
         /// <summary>
@@ -93,60 +96,94 @@ namespace Tetris
                 // affiche le bloc
                 blockFalling.Display();
 
+                // --- Gestion de la touche P ---
+                if ((GetAsyncKeyState(0x50) & 0x8000) != 0)
+                {
+                    TogglePause();
+                    Thread.Sleep(150);
+                }
+
+                // --- Affichage pause une seule fois ---
+                if (IsPaused && !wasPaused)
+                {
+                    wasPaused = true;
+
+                    Console.ForegroundColor = ConsoleColor.White;
+                    string pauseText = "=== PAUSE ===";
+                    Console.SetCursorPosition(6 + (_WIDTH * 3 - pauseText.Length) / 2, 6 + _HEIGHT);
+                    Console.Write(pauseText);
+                }
+
+                // --- Tout se fige en pause ---
+                if (IsPaused)
+                {
+                    Thread.Sleep(50);
+                    continue;
+                }
+
+                // --- Sortie de pause : redessine proprement une seule fois ---
+                if (!IsPaused && wasPaused)
+                {
+                    wasPaused = false;
+                    DisplayAllBlocks();
+                    ShowScore();
+                    ShowNextBlock();
+                }
+
                 // flèche de droite
                 if ((GetAsyncKeyState(_VK_RIGHT) & 0x8000) != 0 && (endCoolDown - startCoolDown).TotalMilliseconds > cooldownMovement)
-                {
-                    // s'il peut aller à droite
-                    if (grid.CanBlockFit(blockFalling, 1, 0))
                     {
-                        // bouge le bloc à droite commence le cooldown et efface le précédent bloc
-                        grid.MoveBlock(blockFalling, 1, 0);
-                        blockFalling.Erase();
-                        blockFalling.Move(3, 0);
-                        blockFalling.Display();
-                        startCoolDown = DateTime.Now;
+                        // s'il peut aller à droite
+                        if (grid.CanBlockFit(blockFalling, 1, 0))
+                        {
+                            // bouge le bloc à droite commence le cooldown et efface le précédent bloc
+                            grid.MoveBlock(blockFalling, 1, 0);
+                            blockFalling.Erase();
+                            blockFalling.Move(3, 0);
+                            blockFalling.Display();
+                            startCoolDown = DateTime.Now;
+                        }
                     }
-                }
 
-                // flèche de gauche
-                else if ((GetAsyncKeyState(_VK_LEFT) & 0x8000) != 0 && (endCoolDown - startCoolDown).TotalMilliseconds > cooldownMovement)
-                {
-                    // bouge le bloc à gauche si c'est possible
-                    if (grid.CanBlockFit(blockFalling, -1, 0))
+                    // flèche de gauche
+                    else if ((GetAsyncKeyState(_VK_LEFT) & 0x8000) != 0 && (endCoolDown - startCoolDown).TotalMilliseconds > cooldownMovement)
                     {
-                        grid.MoveBlock(blockFalling, -1, 0);
-                        blockFalling.Erase();
-                        blockFalling.Move(-3, 0);
-                        blockFalling.Display();
-                        startCoolDown = DateTime.Now;
+                        // bouge le bloc à gauche si c'est possible
+                        if (grid.CanBlockFit(blockFalling, -1, 0))
+                        {
+                            grid.MoveBlock(blockFalling, -1, 0);
+                            blockFalling.Erase();
+                            blockFalling.Move(-3, 0);
+                            blockFalling.Display();
+                            startCoolDown = DateTime.Now;
+                        }
                     }
-                }
 
-                // flèche du bas
-                else if ((GetAsyncKeyState(_VK_DOWN) & 0x8000) != 0 && (endCoolDown - startCoolDown).TotalMilliseconds > cooldownMovement)
-                {
-                    // bouge le bloc en bas si c'est possible
-                    if (grid.CanBlockFit(blockFalling, 0, 1))
+                    // flèche du bas
+                    else if ((GetAsyncKeyState(_VK_DOWN) & 0x8000) != 0 && (endCoolDown - startCoolDown).TotalMilliseconds > cooldownMovement)
                     {
-                        grid.MoveBlock(blockFalling, 0, 1);
-                        blockFalling.Erase();
-                        blockFalling.Move(0, 2);
-                        blockFalling.Display();
-                        startCoolDown = DateTime.Now;
+                        // bouge le bloc en bas si c'est possible
+                        if (grid.CanBlockFit(blockFalling, 0, 1))
+                        {
+                            grid.MoveBlock(blockFalling, 0, 1);
+                            blockFalling.Erase();
+                            blockFalling.Move(0, 2);
+                            blockFalling.Display();
+                            startCoolDown = DateTime.Now;
+                        }
                     }
-                }
 
-                // barre espace
-                else if ((GetAsyncKeyState(_VK_SPACE) & 0x8000) != 0 && (endCoolDown - startCoolDown).TotalMilliseconds > cooldownMovement)
-                {
-                    // fais rotationner le bloc si c'est possible
-                    if (grid.CanBlockRotate(blockFalling))
+                    // barre espace
+                    else if ((GetAsyncKeyState(_VK_SPACE) & 0x8000) != 0 && (endCoolDown - startCoolDown).TotalMilliseconds > cooldownMovement)
                     {
-                        grid.RotateBlock(blockFalling);
-                        startCoolDown = DateTime.Now;
+                        // fais rotationner le bloc si c'est possible
+                        if (grid.CanBlockRotate(blockFalling))
+                        {
+                            grid.RotateBlock(blockFalling);
+                            startCoolDown = DateTime.Now;
+                        }
                     }
-                }
-
+                
                 // après le cooldown, on finit le tour et on descend le bloc de 1
                 if (grid.CanBlockFit(blockFalling, 0, 1) && (endOfTurn - startOfTurn).Milliseconds > blockFallsAfter)
                 {
@@ -298,5 +335,14 @@ namespace Tetris
 
             _nextBlock.Display();
         }
+
+        /// <summary>
+        /// Toggle la pause
+        /// </summary>
+        public void TogglePause()
+        {
+            IsPaused = !IsPaused;
+        }
+
     }
 }
