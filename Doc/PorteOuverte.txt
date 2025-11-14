@@ -1,0 +1,6 @@
+https://github.com/NovaNoctua/Tetris/
+
+Monter l'options des couleurs --> Custom.cs
+Monter l'effet prochain bloc --> ShowNextBloc dans Game.cs
+
+Expliquer le fait que les BlockT (etc) sont des "enfants" de la classe Block.
