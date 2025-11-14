@@ -169,6 +169,7 @@ namespace Tetris
                 Thread.Sleep(500);
                 DisplayAllBlocks();
                 score += _linesDestroyed * _SCORE_ADDER;
+                blockFallsAfter = Math.Max(blockFallsAfter - 10, 100);
                 _linesDestroyed = 0;             
                 ShowScore();
             }
