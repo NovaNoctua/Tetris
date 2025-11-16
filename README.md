@@ -1,6 +1,6 @@
 # 🎮 Tetris Console – Projet C#
 
-Un projet Tetris développé en C# (console), réalisé dans le cadre de l’ETML.
+Un projet Tetris développé en C# (console).
 Le jeu reproduit les mécaniques classiques de Tetris tout en étant entièrement affiché dans la console : gestion des pièces, collisions, rotation, lignes complètes, score et prochaine pièce.
 
 ---
