@@ -6,6 +6,9 @@
 /// *******************************************************************************************
  
 using System;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Tetris
 {
@@ -35,6 +38,46 @@ namespace Tetris
 
             // fin du jeu
             game.EndScreen();
+
+            SendAPI(game).Wait();
+
+            Console.ReadLine();
+
+        }
+
+        public static async Task SendAPI(Game game)
+        {
+            Console.CursorVisible = true;
+            ConsoleExtensions.EnableEcho();
+            Console.SetCursorPosition(10 + game.grid.Row * 3, 25);
+            Console.Write("Inscrivez votre nom : ");
+
+            string player = Console.ReadLine();
+            int score = game.score;
+            int linesDestroyed = game.linesDestroyed;
+            Console.CursorVisible = false;
+
+            // Construct JSON
+            string json = $"{{\"player\":\"{player}\",\"score\":{score},\"linesDestroyed\":{linesDestroyed}}}";
+
+            using (var client = new HttpClient())
+            {
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                try
+                {
+                    HttpResponseMessage response = await client.PostAsync("http://localhost:3333/highscores", content);
+                    string result = await response.Content.ReadAsStringAsync();
+
+                    Console.SetCursorPosition(10 + game.grid.Row * 3, 26);
+                    Console.WriteLine("Score envoyé !");
+                }
+                catch (Exception ex)
+                {
+                    Console.SetCursorPosition(10 + game.grid.Row * 3, 26);
+                    Console.WriteLine("Erreur API : " + ex.Message);
+                }
+            }
         }
 
 
@@ -61,5 +104,13 @@ namespace Tetris
             if (GetConsoleMode(handle, out uint mode))
                 SetConsoleMode(handle, mode & ~ENABLE_ECHO_INPUT);
         }
+
+        public static void EnableEcho()
+        {
+            var handle = GetStdHandle(STD_INPUT_HANDLE);
+            if (GetConsoleMode(handle, out uint mode))
+                SetConsoleMode(handle, mode | ENABLE_ECHO_INPUT);
+        }
+
     }
 }

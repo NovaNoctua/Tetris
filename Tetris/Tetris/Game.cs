@@ -29,7 +29,7 @@ namespace Tetris
         private const int _SCORE_ADDER = 500;                       // nombre de score par ligne détruite
 
         // Déclaration et initialisation des attributs **********************************
-        private GameGrid grid;                                          // grille de jeu
+        public GameGrid grid;                                          // grille de jeu
         private int blockFallsAfter = 500;                              // temps de cooldown avant qu'un bloc tombe
         private int cooldownMovement = 100;                             // temps de cooldown avant chaque input
         private DateTime startCoolDown;                                 // début du cooldown
@@ -38,8 +38,9 @@ namespace Tetris
         private DateTime endOfTurn;                                     // fin du tour
         private readonly List<Block> allBlocks = new List<Block>();     // liste de tous les blocs
         public bool endGame;                                            // fin du jeu
-        private int _linesDestroyed;                                    // lignes détruites
-        private int score;                                              // score du jeu
+        private int _linesDestroyedNow;                                    // lignes détruites
+        public int linesDestroyed;
+        public int score;                                              // score du jeu
         private Block _nextBlock;                                       // prochain bloc
 
         private bool wasPaused = false;
@@ -198,16 +199,17 @@ namespace Tetris
             }
 
             // si y'a des lignes à détruire, on les détruit
-            _linesDestroyed += grid.ClearFullRow();
+            _linesDestroyedNow += grid.ClearFullRow();
 
             // augmente le score si des lignes ont été détruites
-            if (_linesDestroyed > 0)
+            if (_linesDestroyedNow > 0)
             {
+                linesDestroyed += _linesDestroyedNow;
                 Thread.Sleep(500);
                 DisplayAllBlocks();
-                score += _linesDestroyed * _SCORE_ADDER;
+                score += _linesDestroyedNow * _SCORE_ADDER;
                 blockFallsAfter = Math.Max(blockFallsAfter - 10, 100);
-                _linesDestroyed = 0;             
+                _linesDestroyedNow = 0;             
                 ShowScore();
             }
         }
@@ -224,9 +226,8 @@ namespace Tetris
             Console.SetCursorPosition(10 + grid.Row * 3, 6);
             Console.Write($"Vous avez fait un score de {score}.");
             Console.SetCursorPosition(10 + grid.Row * 3, 6);
-            Console.Write($"Nombre de lignes détruite(s) : {score / _SCORE_ADDER}");
+            Console.Write($"Nombre de lignes détruite(s) : {linesDestroyed}");
 
-            Console.ReadLine();
         }
 
         /// <summary>
@@ -302,7 +303,7 @@ namespace Tetris
             Console.SetCursorPosition(grid.Row * 3 - 3, 3);
             Console.Write($"Score : {score}");
             Console.SetCursorPosition(grid.Row * 3 - 24, 4);
-            Console.Write($"Nombre de lignes détruites : {score / 500}");
+            Console.Write($"Nombre de lignes détruites : {linesDestroyed}");
         }
 
         /// <summary>
