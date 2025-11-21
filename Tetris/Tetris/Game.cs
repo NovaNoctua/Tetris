@@ -30,7 +30,10 @@ namespace Tetris
 
         // Déclaration et initialisation des attributs **********************************
         public GameGrid grid;                                          // grille de jeu
+
+        // Activité 2 : Modifier la vitesse du jeu
         private int blockFallsAfter = 500;                              // temps de cooldown avant qu'un bloc tombe
+
         private int cooldownMovement = 100;                             // temps de cooldown avant chaque input
         private DateTime startCoolDown;                                 // début du cooldown
         private DateTime endCoolDown;                                   // fin du cooldown
@@ -42,6 +45,9 @@ namespace Tetris
         public int linesDestroyed;
         public int score;                                              // score du jeu
         private Block _nextBlock;                                       // prochain bloc
+
+        private readonly DateTime _startTime = DateTime.Now;            //Minuteur
+        private const int MAX_SECONDS = 60;                             //Temps de jeu
 
         private bool wasPaused = false;
         public bool IsPaused { get; private set; } = false;             // Pause
@@ -65,6 +71,7 @@ namespace Tetris
         /// </summary>
         public void GameLoop()
         {
+
             // bloc en prenant le prochain
             Block blockFalling = _nextBlock;
             blockFalling.MoveBlock(_STARTING_X_POSITION, _STARTING_Y_POSITION);
@@ -90,6 +97,16 @@ namespace Tetris
             // tant que le bloc peut descendre
             while (grid.CanBlockFit(blockFalling, 0, 1))
             {
+
+             
+                    DisplayTimer();
+                    if ((DateTime.Now - _startTime).TotalSeconds >= MAX_SECONDS)
+                    {
+                        endGame = true;
+                        return;
+                    }
+
+
                 // début la fin du tour
                 endOfTurn = DateTime.Now;
                 endCoolDown = DateTime.Now;
@@ -344,6 +361,22 @@ namespace Tetris
         public void TogglePause()
         {
             IsPaused = !IsPaused;
+        }
+
+        /// <summary>
+        /// Afficher le temps de jeu
+        /// </summary>
+        private void DisplayTimer()
+        {
+            int elapsed = (int)(DateTime.Now - _startTime).TotalSeconds;
+            int remaining = MAX_SECONDS - elapsed;
+
+            Console.SetCursorPosition(0, 0);
+            Console.WriteLine($"Temps écoulé : {elapsed}s     ");
+
+            // Si tu veux aussi le temps restant :
+            Console.SetCursorPosition(0, 1);
+            Console.WriteLine($"Temps restant : {remaining}s     ");
         }
 
     }

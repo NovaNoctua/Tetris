@@ -17,6 +17,7 @@ namespace Tetris
 
         private static Random random = new Random();        // permet l'aléatoire
 
+        //Activité 1: Changer la couleur des pièces 
         public static readonly ConsoleColor[] Colors = {    // couleur aléatoire de la console
             ConsoleColor.DarkBlue,
             ConsoleColor.DarkGreen,
