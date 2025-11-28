@@ -47,7 +47,7 @@ namespace Tetris
         private Block _nextBlock;                                       // prochain bloc
 
         private readonly DateTime _startTime = DateTime.Now;            //Minuteur
-        private const int MAX_SECONDS = 60;                             //Temps de jeu
+        private const int MAX_SECONDS = 120;                             //Temps de jeu
 
         private bool wasPaused = false;
         public bool IsPaused { get; private set; } = false;             // Pause

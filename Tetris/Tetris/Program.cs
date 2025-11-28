@@ -8,6 +8,7 @@
 using System;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Tetris
@@ -41,7 +42,9 @@ namespace Tetris
 
             SendAPI(game).Wait();
 
-            Console.ReadLine();
+            Thread.Sleep(2000);
+
+            System.Environment.Exit(1);
 
         }
 
@@ -75,6 +78,7 @@ namespace Tetris
 
                     Console.SetCursorPosition(10 + game.grid.Row * 3, 26);
                     Console.WriteLine("Score envoyé !");
+                    Console.WriteLine("Fermeture du jeu...");
                 }
                 catch (Exception ex)
                 {
