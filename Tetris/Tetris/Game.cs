@@ -96,16 +96,13 @@ namespace Tetris
 
             // tant que le bloc peut descendre
             while (grid.CanBlockFit(blockFalling, 0, 1))
-            {
-
-             
-                    DisplayTimer();
-                    if ((DateTime.Now - _startTime).TotalSeconds >= MAX_SECONDS)
-                    {
-                        endGame = true;
-                        return;
-                    }
-
+            {            
+                DisplayTimer();
+                if ((DateTime.Now - _startTime).TotalSeconds >= MAX_SECONDS)
+                {
+                    endGame = true;
+                    return;
+                }
 
                 // début la fin du tour
                 endOfTurn = DateTime.Now;
@@ -371,6 +368,7 @@ namespace Tetris
             int elapsed = (int)(DateTime.Now - _startTime).TotalSeconds;
             int remaining = MAX_SECONDS - elapsed;
 
+            Console.ForegroundColor = ConsoleColor.White;
             Console.SetCursorPosition(0, 0);
             Console.WriteLine($"Temps écoulé : {elapsed}s     ");
 

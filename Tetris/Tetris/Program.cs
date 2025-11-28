@@ -26,7 +26,6 @@ namespace Tetris
             Console.CursorVisible = false;
             Start.Introduction();
             Config.GameSize();
-            //ConsoleExtensions.DisableEcho();
 
             // Initialisation du jeu
             game.Initialize();
@@ -54,7 +53,6 @@ namespace Tetris
             {
                 Console.ReadKey(true); // vide le buffer sans afficher
             }
-            //ConsoleExtensions.EnableEcho();
             Console.CursorVisible = true;
             Console.SetCursorPosition(10 + game.grid.Row * 3, 25);
             Console.Write("Inscrivez votre nom : ");
@@ -78,6 +76,7 @@ namespace Tetris
 
                     Console.SetCursorPosition(10 + game.grid.Row * 3, 26);
                     Console.WriteLine("Score envoyé !");
+                    Console.SetCursorPosition(10 + game.grid.Row * 3, 27);
                     Console.WriteLine("Fermeture du jeu...");
                 }
                 catch (Exception ex)
@@ -87,38 +86,5 @@ namespace Tetris
                 }
             }
         }
-
-
-
     }
-
-    //public static class ConsoleExtensions
-    //{
-    //    const int STD_INPUT_HANDLE = -10;
-    //    const uint ENABLE_ECHO_INPUT = 0x0004;
-
-    //    [System.Runtime.InteropServices.DllImport("kernel32.dll")]
-    //    static extern IntPtr GetStdHandle(int nStdHandle);
-
-    //    [System.Runtime.InteropServices.DllImport("kernel32.dll")]
-    //    static extern bool GetConsoleMode(IntPtr hConsoleHandle, out uint lpMode);
-
-    //    [System.Runtime.InteropServices.DllImport("kernel32.dll")]
-    //    static extern bool SetConsoleMode(IntPtr hConsoleHandle, uint dwMode);
-
-    //    public static void DisableEcho()
-    //    {
-    //        var handle = GetStdHandle(STD_INPUT_HANDLE);
-    //        if (GetConsoleMode(handle, out uint mode))
-    //            SetConsoleMode(handle, mode & ~ENABLE_ECHO_INPUT);
-    //    }
-
-    //    public static void EnableEcho()
-    //    {
-    //        var handle = GetStdHandle(STD_INPUT_HANDLE);
-    //        if (GetConsoleMode(handle, out uint mode))
-    //            SetConsoleMode(handle, mode | ENABLE_ECHO_INPUT);
-    //    }
-
-    //}
 }
