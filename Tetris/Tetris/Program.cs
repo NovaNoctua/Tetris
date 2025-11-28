@@ -6,6 +6,7 @@
 /// *******************************************************************************************
  
 using System;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
@@ -53,6 +54,39 @@ namespace Tetris
             {
                 Console.ReadKey(true); // vide le buffer sans afficher
             }
+            //Console.CursorVisible = true;
+            //Console.SetCursorPosition(10 + game.grid.Row * 3, 25);
+            //Console.Write("Inscrivez votre nom : ");
+
+            //string player = Console.ReadLine();
+            //int score = game.score;
+            //int linesDestroyed = game.linesDestroyed;
+            //Console.CursorVisible = false;
+
+            //// Construct JSON
+            //string json = $"{{\"player\":\"{player}\",\"score\":{score},\"linesDestroyed\":{linesDestroyed}}}";
+
+            //using (var client = new HttpClient())
+            //{
+            //    var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            //    try
+            //    {
+            //        HttpResponseMessage response = await client.PostAsync("http://localhost:3333/highscores", content);
+            //        string result = await response.Content.ReadAsStringAsync();
+
+            //        Console.SetCursorPosition(10 + game.grid.Row * 3, 26);
+            //        Console.WriteLine("Score envoyé !");
+            //        Console.SetCursorPosition(10 + game.grid.Row * 3, 27);
+            //        Console.WriteLine("Fermeture du jeu...");
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Console.SetCursorPosition(10 + game.grid.Row * 3, 26);
+            //        Console.WriteLine("Erreur API : " + ex.Message);
+            //    }
+            //}
+
             Console.CursorVisible = true;
             Console.SetCursorPosition(10 + game.grid.Row * 3, 25);
             Console.Write("Inscrivez votre nom : ");
@@ -62,29 +96,54 @@ namespace Tetris
             int linesDestroyed = game.linesDestroyed;
             Console.CursorVisible = false;
 
-            // Construct JSON
-            string json = $"{{\"player\":\"{player}\",\"score\":{score},\"linesDestroyed\":{linesDestroyed}}}";
+            string path = "..\\..\\..\\..\\HighScores\\highscores.json";
 
-            using (var client = new HttpClient())
+            string json;
+
+            // Lire le fichier si existe, sinon tableau vide
+            if (File.Exists(path))
             {
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-                try
-                {
-                    HttpResponseMessage response = await client.PostAsync("http://localhost:3333/highscores", content);
-                    string result = await response.Content.ReadAsStringAsync();
-
-                    Console.SetCursorPosition(10 + game.grid.Row * 3, 26);
-                    Console.WriteLine("Score envoyé !");
-                    Console.SetCursorPosition(10 + game.grid.Row * 3, 27);
-                    Console.WriteLine("Fermeture du jeu...");
-                }
-                catch (Exception ex)
-                {
-                    Console.SetCursorPosition(10 + game.grid.Row * 3, 26);
-                    Console.WriteLine("Erreur API : " + ex.Message);
-                }
+                json = File.ReadAllText(path).Trim();
+                if (json == "") json = "[]";
             }
+            else
+            {
+                json = "[]";
+            }
+
+            // S'assurer que le JSON est un tableau
+            if (!json.StartsWith("[") || !json.EndsWith("]"))
+            {
+                json = "[]";
+            }
+
+            // Nouvel objet JSON en texte
+            string newEntry =
+                "{" +
+                "\"player\":\"" + player + "\"," +
+                "\"score\":" + score + "," +
+                "\"linesDestroyed\":" + linesDestroyed + "," +
+                "\"time\":\"" + DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss") + "\"" +
+                "}";
+
+            // Si tableau vide
+            if (json == "[]")
+            {
+                json = "[" + newEntry + "]";
+            }
+            else
+            {
+                // Ajouter avant le ] final
+                json = json.Substring(0, json.Length - 1) + "," + newEntry + "]";
+            }
+
+            // Écrire dans le fichier
+            File.WriteAllText(path, json);
+
+            Console.SetCursorPosition(10 + game.grid.Row * 3, 26);
+            Console.WriteLine("Score enregistré !");
+            Console.SetCursorPosition(10 + game.grid.Row * 3, 27);
+            Console.WriteLine("Fermeture du jeu...");
         }
     }
 }
