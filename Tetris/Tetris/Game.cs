@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Xml.Schema;
 
 
 namespace Tetris
@@ -31,7 +32,6 @@ namespace Tetris
         // Déclaration et initialisation des attributs **********************************
         public GameGrid grid;                                          // grille de jeu
 
-        // Activité 2 : Modifier la vitesse du jeu
         private int blockFallsAfter = 500;                              // temps de cooldown avant qu'un bloc tombe
 
         private int cooldownMovement = 100;                             // temps de cooldown avant chaque input
@@ -44,6 +44,8 @@ namespace Tetris
         private int _linesDestroyedNow;                                    // lignes détruites
         public int linesDestroyed;
         public int score;                                              // score du jeu
+        private int scoreAdded;
+        private int combo;
         private Block _nextBlock;                                       // prochain bloc
 
         private readonly DateTime _startTime = DateTime.Now;            //Minuteur
@@ -64,6 +66,7 @@ namespace Tetris
             endGame = false;
             ShowScore();
             _nextBlock = Block.GetRandomBlock(_WIDTH + 2, 1);
+            combo = 1;
         }
 
         /// <summary>
@@ -97,6 +100,17 @@ namespace Tetris
             // tant que le bloc peut descendre
             while (grid.CanBlockFit(blockFalling, 0, 1))
             {            
+                if(combo > 1)
+                {
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.SetCursorPosition(grid.Row * 3 + 2, 2);
+                    Console.Write($" + {scoreAdded}");
+                }
+                else
+                {
+                    Console.SetCursorPosition(grid.Row * 3 - 3, 2);
+                    Console.Write("                      ");
+                }
                 DisplayTimer();
                 if ((DateTime.Now - _startTime).TotalSeconds >= MAX_SECONDS)
                 {
@@ -221,11 +235,22 @@ namespace Tetris
                 linesDestroyed += _linesDestroyedNow;
                 Thread.Sleep(500);
                 DisplayAllBlocks();
-                score += _linesDestroyedNow * _SCORE_ADDER;
+                scoreAdded = CalculateScore(_linesDestroyedNow, combo, _SCORE_ADDER);
+                score += scoreAdded;
+                combo++;
                 blockFallsAfter = Math.Max(blockFallsAfter - 10, 100);
                 _linesDestroyedNow = 0;             
                 ShowScore();
+            } else
+            {
+                combo = 1;
+                ShowScore();
             }
+        }
+
+        private int CalculateScore(int linesDestroyed, int combo, int scoreAdder)
+        {
+            return linesDestroyed * linesDestroyed * scoreAdder * combo;
         }
 
         /// <summary>
@@ -314,6 +339,8 @@ namespace Tetris
         {
             Console.ForegroundColor = ConsoleColor.White;
             DestroyScore();
+            Console.SetCursorPosition(grid.Row * 3 - 3, 1);
+            Console.Write($"Combo : x{(combo > 1 ? combo : 0)}");
             Console.SetCursorPosition(grid.Row * 3 - 3, 3);
             Console.Write($"Score : {score}");
             Console.SetCursorPosition(grid.Row * 3 - 24, 4);
@@ -325,8 +352,10 @@ namespace Tetris
         /// </summary>
         private void DestroyScore()
         {
-            Console.SetCursorPosition(grid.Row * 3 - 3, 3);
-            Console.Write("        ");
+            Console.SetCursorPosition(grid.Row * 3 - 3, 1);
+            Console.Write("            ");
+            Console.SetCursorPosition(grid.Row * 3 - 3, 1);
+            Console.Write("            ");
         }
 
         /// <summary>
